@@ -96,7 +96,7 @@ app.post('/sms', async (req, res) => {
       twiml.message(organization.removedMessage);
 
       const customers = await getCustomers(organization.id);
-      io.emit('data', {customers});
+      io.to(organization.id).emit('data', {customers});
     } else {
       twiml.message(organization.notRemovedMessage);
     }
@@ -133,12 +133,8 @@ app.post('/sms', async (req, res) => {
 
       twiml.message(message);
 
-        // broadcast new customer list to all connected clients
-        const customers = await getCustomers();
-        io.emit('data', {customers});
-      } else {
-        twiml.message('The list is currently full. Please try again later.');
-      }
+      // broadcast new customer list to all connected clients
+      io.to(organization.id).emit('data', {customers});
     } else {
       twiml.message(organization.notAcceptingMessage);
     }
@@ -211,7 +207,7 @@ io.on('connection', async socket => {
         });
 
       const customers = await getCustomers(organizationId);
-      io.emit('data', {customers});
+      io.to(organizationId).emit('data', {customers});
     })
     .on('remove', async id => {
       // TODO: verify that customer is part of org/exists
@@ -220,14 +216,14 @@ io.on('connection', async socket => {
         .del();
 
       const customers = await getCustomers(organizationId);
-      io.emit('data', {customers});
+      io.to(organizationId).emit('data', {customers});
     })
     .on('accept', async accepting => {
       const [isAccepting] = await db('organizations')
         .where('id', organizationId)
         .update({accepting})
         .returning('accepting');
-      io.emit('data', {isAccepting});
+      io.to(organizationId).emit('data', {isAccepting});
     });
 });
 
