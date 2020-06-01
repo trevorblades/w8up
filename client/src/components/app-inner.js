@@ -125,7 +125,7 @@ export default function AppInner(props) {
       event.target.checked ||
       confirm('Are you sure you want to stop accepting customers?')
     ) {
-      props.socket.emit('accept', {value: event.target.checked});
+      props.socket.emit('accept', event.target.checked);
     }
   }
 
@@ -181,7 +181,7 @@ export default function AppInner(props) {
               >
                 <DarkButton
                   mr="3"
-                  onClick={() => props.socket.emit('serve', {id: customer.id})}
+                  onClick={() => props.socket.emit('serve', customer.id)}
                 >
                   Serve
                 </DarkButton>
@@ -192,7 +192,7 @@ export default function AppInner(props) {
                         `Are you sure you want to remove "${customer.name}"?`
                       )
                     ) {
-                      props.socket.emit('remove', {id: customer.id});
+                      props.socket.emit('remove', customer.id);
                     }
                   }}
                 >
@@ -253,7 +253,7 @@ export default function AppInner(props) {
                 <PanelListItem
                   key={customer.id}
                   title={customer.name}
-                  subtitle={`Served by ${customer.barberName}`}
+                  subtitle={`Served by ${customer.agentName}`}
                 >
                   <Text color="gray.500">
                     {format(new Date(customer.servedAt), 'p')}
