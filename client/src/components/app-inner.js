@@ -117,7 +117,7 @@ export default function AppInner(props) {
   );
 
   function handleNextClick() {
-    props.socket.emit('serve', {id: waitingCustomers[0].id});
+    props.socket.emit('serve', waitingCustomers[0].id);
   }
 
   function handleAcceptingChange(event) {
