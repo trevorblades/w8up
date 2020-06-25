@@ -69,7 +69,7 @@ export default function UserMenu(props) {
       </Menu>
       <Modal
         closeOnOverlayClick={false}
-        size="3xl"
+        size={['lg', 'xl', '2xl', '3xl']}
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
       >

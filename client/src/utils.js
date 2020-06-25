@@ -48,9 +48,7 @@ export const WAITLIST_QUERY = gql`
       }
     }
     organization(id: $organizationId) {
-      id
-      name
-      accepting
+      ...OrganizationFragment
       customers(served: false) {
         id
         name
@@ -59,6 +57,7 @@ export const WAITLIST_QUERY = gql`
       }
     }
   }
+  ${ORGANIZATION_FRAGMENT}
 `;
 
 export const SERVE_CUSTOMER = gql`

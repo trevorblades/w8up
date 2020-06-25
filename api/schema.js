@@ -42,7 +42,21 @@ export const typeDefs = gql`
 
   input UpdateOrganizationInput {
     id: ID!
+    name: String
     accepting: Boolean
+    queueLimit: Int
+    averageHandleTime: Int
+    activeAgents: Int
+    keyword: String
+    person: String
+    welcomeMessage: String
+    queueMessage: String
+    queueEmptyMessage: String
+    notAcceptingMessage: String
+    readyMessage: String
+    removedMessage: String
+    notRemovedMessage: String
+    limitExceededMessage: String
   }
 
   type Customer {
@@ -58,7 +72,6 @@ export const typeDefs = gql`
     id: ID!
     name: String!
     phone: String!
-    customers(served: Boolean!): [Customer!]!
     accepting: Boolean!
     queueLimit: Int!
     averageHandleTime: Int!
@@ -73,6 +86,7 @@ export const typeDefs = gql`
     removedMessage: String!
     notRemovedMessage: String!
     limitExceededMessage: String!
+    customers(served: Boolean!): [Customer!]!
   }
 
   type User {
@@ -247,7 +261,8 @@ export const resolvers = {
           name: input.name,
           phone: input.phone,
           owner: user.id,
-          subscriptionId: subscription.id
+          subscriptionId: subscription.id,
+          accepting: false
         })
         .returning('*');
 

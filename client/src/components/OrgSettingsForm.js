@@ -2,6 +2,7 @@ import ChatPreview from './ChatPreview';
 import PropTypes from 'prop-types';
 import React, {useState} from 'react';
 import isEqual from 'lodash.isequal';
+import omit from 'lodash.omit';
 import {
   Button,
   Divider,
@@ -18,12 +19,46 @@ import {
   NumberInputField,
   NumberInputStepper,
   Stack,
+  Text,
   Textarea
 } from '@chakra-ui/core';
 import {format} from 'phone-fns';
+import {gql, useMutation} from '@apollo/client';
+
+export const ORG_DETAILS_FRAGMENT = gql`
+  fragment OrgDetailsFragment on Organization {
+    id
+    name
+    queueLimit
+    averageHandleTime
+    activeAgents
+    keyword
+    person
+    welcomeMessage
+    queueMessage
+    queueEmptyMessage
+    notAcceptingMessage
+    readyMessage
+    removedMessage
+    notRemovedMessage
+    limitExceededMessage
+  }
+`;
+
+const UPDATE_ORGANIZATION = gql`
+  mutation UpdateOrganization($input: UpdateOrganizationInput!) {
+    updateOrganization(input: $input) {
+      ...OrgDetailsFragment
+    }
+  }
+  ${ORG_DETAILS_FRAGMENT}
+`;
 
 export default function OrgSettingsForm(props) {
   const [organization, setOrganization] = useState(props.organization);
+  const [updateOrganization, {loading, error}] = useMutation(
+    UPDATE_ORGANIZATION
+  );
 
   function handleInputChange(event) {
     const {name, value} = event.target;
@@ -35,12 +70,18 @@ export default function OrgSettingsForm(props) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    console.log(event.target.queueLimit.value);
+
+    updateOrganization({
+      variables: {
+        input: omit(organization, ['phone', '__typename'])
+      }
+    });
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form autoComplete="off" onSubmit={handleSubmit}>
       <ModalBody as={Stack} spacing="4">
+        {error && <Text color="red.500">{error.message}</Text>}
         <FormControl>
           <FormLabel>Organization name</FormLabel>
           <Input
@@ -254,6 +295,7 @@ export default function OrgSettingsForm(props) {
         <Button
           isDisabled={isEqual(props.organization, organization)}
           type="submit"
+          isLoading={loading}
           variantColor="green"
         >
           Save changes
