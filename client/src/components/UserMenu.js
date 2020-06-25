@@ -17,15 +17,22 @@ import {
   ModalHeader,
   ModalOverlay,
   Stack,
-  Text
+  Text,
+  useToast
 } from '@chakra-ui/core';
 import {FaCaretDown, FaCog, FaSignOutAlt} from 'react-icons/fa';
 import {Link as GatsbyLink} from 'gatsby';
 import {LogOutContext} from '../utils';
 
 export default function UserMenu(props) {
+  const toast = useToast();
   const logOut = useContext(LogOutContext);
   const [modalOpen, setModalOpen] = useState(false);
+
+  function closeModal() {
+    setModalOpen(false);
+  }
+
   return (
     <>
       <Menu>
@@ -71,13 +78,23 @@ export default function UserMenu(props) {
         closeOnOverlayClick={false}
         size={['lg', 'xl', '2xl', '3xl']}
         isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
+        onClose={closeModal}
       >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Organization settings</ModalHeader>
           <ModalCloseButton />
           <OrgSettingsModalContent
+            onCompleted={() => {
+              closeModal();
+              toast({
+                duration: 3000,
+                status: 'success',
+                position: 'top',
+                title: 'Organization updated',
+                description: 'Your changes have been saved'
+              });
+            }}
             queryOptions={{
               variables: {
                 id: props.organization.id

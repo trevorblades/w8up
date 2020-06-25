@@ -14,7 +14,7 @@ const GET_ORG_DETAILS = gql`
   ${ORG_DETAILS_FRAGMENT}
 `;
 
-export default function OrgSettingsModalContent({queryOptions}) {
+export default function OrgSettingsModalContent({onCompleted, queryOptions}) {
   const {data, loading, error} = useQuery(GET_ORG_DETAILS, queryOptions);
 
   if (loading) {
@@ -33,9 +33,15 @@ export default function OrgSettingsModalContent({queryOptions}) {
     );
   }
 
-  return <OrgSettingsForm organization={data.organization} />;
+  return (
+    <OrgSettingsForm
+      onCompleted={onCompleted}
+      organization={data.organization}
+    />
+  );
 }
 
 OrgSettingsModalContent.propTypes = {
-  queryOptions: PropTypes.object.isRequired
+  queryOptions: PropTypes.object.isRequired,
+  onCompleted: PropTypes.func.isRequired
 };

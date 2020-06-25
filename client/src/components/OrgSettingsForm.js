@@ -56,9 +56,10 @@ const UPDATE_ORGANIZATION = gql`
 
 export default function OrgSettingsForm(props) {
   const [organization, setOrganization] = useState(props.organization);
-  const [updateOrganization, {loading, error}] = useMutation(
-    UPDATE_ORGANIZATION
-  );
+  const [
+    updateOrganization,
+    {loading, error}
+  ] = useMutation(UPDATE_ORGANIZATION, {onCompleted: props.onCompleted});
 
   function handleInputChange(event) {
     const {name, value} = event.target;
@@ -306,5 +307,6 @@ export default function OrgSettingsForm(props) {
 }
 
 OrgSettingsForm.propTypes = {
-  organization: PropTypes.object.isRequired
+  organization: PropTypes.object.isRequired,
+  onCompleted: PropTypes.func.isRequired
 };
