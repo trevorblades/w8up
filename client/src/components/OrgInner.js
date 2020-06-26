@@ -41,6 +41,7 @@ export default function OrgInner({organizationId}) {
         <UserMenu user={data.me} organization={data.organization} />
       </Header>
       <Waitlist
+        organizationId={organizationId}
         customers={data.organization.customers}
         nowServing={data.me.nowServing}
         subscribeToMore={subscribeToMore}

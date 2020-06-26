@@ -197,9 +197,10 @@ export const resolvers = {
       }
 
       const organization = await db('organizations')
+        .join('members', 'organizations.id', '=', 'members.organizationId')
         .where({
           id: customer.organizationId,
-          owner: user.id
+          'members.userId': user.id
         })
         .first();
 
@@ -228,11 +229,12 @@ export const resolvers = {
     async removeCustomer(parent, args, {db, user}) {
       const query = db('customers').where(args);
       const [id] = await query.pluck('organizationId');
-      const [owner] = await db('organizations')
-        .where({id})
-        .pluck('owner');
 
-      if (owner !== user.id) {
+      const organizations = await db('members')
+        .where('userId', user.id)
+        .pluck('organizationId');
+
+      if (!organizations.includes(id)) {
         throw new ForbiddenError('You do not have access to this customer');
       }
 

@@ -35,28 +35,19 @@ function updateQuery(prev, {subscriptionData}) {
     ...prev,
     organization: {
       ...prev.organization,
-      customers: prev.customers.filter(
+      customers: prev.organization.customers.filter(
         customer => customer.id !== (customerServed || customerRemoved).id
       )
     }
   };
 }
 
-function update(cache, result) {
-  const data = cache.readQuery({query: WAITLIST_QUERY});
-  cache.writeQuery({
-    query: WAITLIST_QUERY,
-    data: {
-      ...data,
-      me: {
-        ...data.me,
-        nowServing: result.data.serveCustomer
-      }
-    }
-  });
-}
-
-export default function Waitlist({customers, nowServing, subscribeToMore}) {
+export default function Waitlist({
+  customers,
+  nowServing,
+  subscribeToMore,
+  organizationId
+}) {
   useEffectOnce(() =>
     subscribeToMore({
       document: ON_CUSTOMER_ADDED,
@@ -84,9 +75,30 @@ export default function Waitlist({customers, nowServing, subscribeToMore}) {
     })
   );
 
+  function update(cache, result) {
+    const queryOptions = {
+      query: WAITLIST_QUERY,
+      variables: {
+        organizationId
+      }
+    };
+
+    const data = cache.readQuery(queryOptions);
+    cache.writeQuery({
+      ...queryOptions,
+      data: {
+        ...data,
+        me: {
+          ...data.me,
+          nowServing: result.data.serveCustomer
+        }
+      }
+    });
+  }
+
   return (
     <>
-      <List position="relative" px={{lg: 6}}>
+      <List px={{lg: 6}}>
         {customers.map((customer, index) => (
           <ListItem mx="auto" maxW="containers.lg" key={customer.id}>
             <Box
@@ -164,5 +176,6 @@ export default function Waitlist({customers, nowServing, subscribeToMore}) {
 Waitlist.propTypes = {
   subscribeToMore: PropTypes.func.isRequired,
   nowServing: PropTypes.object.isRequired,
+  organizationId: PropTypes.string.isRequired,
   customers: PropTypes.array.isRequired
 };

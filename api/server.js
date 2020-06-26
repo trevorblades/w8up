@@ -117,7 +117,7 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   subscriptions: {
-    onConnect: async ({authToken}) => {
+    async onConnect({authToken}) {
       if (!authToken) {
         throw new Error('Missing auth token');
       }
@@ -126,7 +126,11 @@ const server = new ApolloServer({
       const organizations = await db('members')
         .where('userId', sub)
         .pluck('organizationId');
-      return {organizations};
+
+      return {
+        db,
+        organizations
+      };
     }
   },
   async context({req, connection}) {
