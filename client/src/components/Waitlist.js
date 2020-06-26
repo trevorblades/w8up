@@ -114,6 +114,9 @@ export default function Waitlist({
                 {index + 1}. {format('(NNN) NNN-NNNN', customer.phone.slice(2))}
               </Text>
               <Text>{customer.name}</Text>
+              {customer.messages.map(message => (
+                <Text key={message.id}>{message.text}</Text>
+              ))}
               <Stack align="center" isInline spacing="2" mt="3">
                 <ServeButton
                   mutationOptions={{

@@ -66,6 +66,13 @@ export const typeDefs = gql`
     waitingSince: DateTime!
     servedAt: DateTime
     servedBy: User
+    messages: [Message!]!
+  }
+
+  type Message {
+    id: ID!
+    text: String!
+    sentAt: DateTime!
   }
 
   type Organization {
@@ -103,6 +110,7 @@ export const typeDefs = gql`
 `;
 
 const CUSTOMER_ADDED = 'CUSTOMER_ADDED';
+export const CUSTOMER_UPDATED = 'CUSTOMER_UPDATED';
 export const CUSTOMER_SERVED = 'CUSTOMER_SERVED';
 export const CUSTOMER_REMOVED = 'CUSTOMER_REMOVED';
 const ORGANIZATION_UPDATED = 'ORGANIZATION_UPDATED';
@@ -303,7 +311,9 @@ export const resolvers = {
       customer.servedBy &&
       db('users')
         .where('id', customer.servedBy)
-        .first()
+        .first(),
+    messages: (customer, args, {db}) =>
+      db('messages').where('customerId', customer.id)
   },
   Organization: {
     async customers(organization, {served}, {db, user}) {

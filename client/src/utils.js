@@ -54,6 +54,11 @@ export const WAITLIST_QUERY = gql`
         name
         phone
         waitingSince
+        messages {
+          id
+          text
+          sentAt
+        }
       }
     }
   }

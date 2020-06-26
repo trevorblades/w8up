@@ -10,6 +10,7 @@ import {ApolloServer, AuthenticationError} from 'apollo-server-express';
 import {
   CUSTOMER_REMOVED,
   CUSTOMER_SERVED,
+  CUSTOMER_UPDATED,
   pubsub,
   resolvers,
   typeDefs
@@ -81,6 +82,25 @@ app.post('/sms', async (req, res) => {
     }
   } else {
     if (organization.accepting) {
+      const customer = await db('customers')
+        .where({
+          servedAt: null,
+          phone: req.body.From,
+          organizationId: organization.id
+        })
+        .first();
+
+      if (customer) {
+        await db('messages').insert({
+          text: req.body.Body,
+          customerId: customer.id
+        });
+
+        pubsub.publish(CUSTOMER_UPDATED, {customerUpdated: customer});
+
+        return;
+      }
+
       const {count: peopleAhead} = await db('customers')
         .count('id')
         .whereNull('servedAt')
