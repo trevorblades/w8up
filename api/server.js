@@ -8,8 +8,8 @@ import knex from 'knex';
 import twilio from 'twilio';
 import {ApolloServer, AuthenticationError} from 'apollo-server-express';
 import {
+  CUSTOMER_ADDED,
   CUSTOMER_REMOVED,
-  CUSTOMER_SERVED,
   CUSTOMER_UPDATED,
   pubsub,
   resolvers,
@@ -111,7 +111,7 @@ app.post('/sms', async (req, res) => {
         const message = createWelcomeMessage(organization, peopleAhead);
         twiml.message(message);
 
-        const [customerServed] = await db('customers')
+        const [customerAdded] = await db('customers')
           .insert({
             name: req.body.Body,
             phone: req.body.From,
@@ -119,7 +119,7 @@ app.post('/sms', async (req, res) => {
           })
           .returning('*');
 
-        pubsub.publish(CUSTOMER_SERVED, {customerServed});
+        pubsub.publish(CUSTOMER_ADDED, {customerAdded});
       } else {
         twiml.message(organization.limitExceededMessage);
       }

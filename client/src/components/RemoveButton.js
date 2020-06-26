@@ -1,16 +1,14 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import {Button} from '@chakra-ui/core';
-import {CUSTOMER_FRAGMENT} from '../utils';
 import {gql, useMutation} from '@apollo/client';
 
 const REMOVE_CUSTOMER = gql`
   mutation RemoveCustomer($id: ID!) {
     removeCustomer(id: $id) {
-      ...CustomerFragment
+      id
     }
   }
-  ${CUSTOMER_FRAGMENT}
 `;
 
 export default function RemoveButton({customer, ...props}) {

@@ -28,7 +28,7 @@ export const typeDefs = gql`
 
   type Subscription {
     customerAdded: Customer
-    customerServed: Customer
+    customerUpdated: Customer
     customerRemoved: Customer
     organizationUpdated: Organization
   }
@@ -109,9 +109,8 @@ export const typeDefs = gql`
   }
 `;
 
-const CUSTOMER_ADDED = 'CUSTOMER_ADDED';
+export const CUSTOMER_ADDED = 'CUSTOMER_ADDED';
 export const CUSTOMER_UPDATED = 'CUSTOMER_UPDATED';
-export const CUSTOMER_SERVED = 'CUSTOMER_SERVED';
 export const CUSTOMER_REMOVED = 'CUSTOMER_REMOVED';
 const ORGANIZATION_UPDATED = 'ORGANIZATION_UPDATED';
 
@@ -173,11 +172,11 @@ export const resolvers = {
           organizations.includes(payload.customerAdded.organizationId)
       )
     },
-    customerServed: {
+    customerUpdated: {
       subscribe: withFilter(
-        () => pubsub.asyncIterator(CUSTOMER_SERVED),
+        () => pubsub.asyncIterator(CUSTOMER_UPDATED),
         (payload, args, {organizations}) =>
-          organizations.includes(payload.customerServed.organizationId)
+          organizations.includes(payload.customerUpdated.organizationId)
       )
     },
     customerRemoved: {
@@ -222,7 +221,7 @@ export const resolvers = {
         to: customer.phone
       });
 
-      const [customerServed] = await query
+      const [customerRemoved] = await query
         .update({
           receipt: message.sid,
           servedAt: new Date(),
@@ -230,9 +229,9 @@ export const resolvers = {
         })
         .returning('*');
 
-      pubsub.publish(CUSTOMER_SERVED, {customerServed});
+      pubsub.publish(CUSTOMER_REMOVED, {customerRemoved});
 
-      return customerServed;
+      return customerRemoved;
     },
     async removeCustomer(parent, args, {db, user}) {
       const query = db('customers').where(args);

@@ -1,12 +1,12 @@
 import NextButton from './NextButton';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, {useCallback} from 'react';
 import RemoveButton from './RemoveButton';
 import ServeButton from './ServeButton';
 import Timer from './Timer';
 import useEffectOnce from 'react-use/lib/useEffectOnce';
 import {Box, Flex, List, ListItem, Stack, Text} from '@chakra-ui/core';
-import {CUSTOMER_FRAGMENT, ON_CUSTOMER_SERVED, WAITLIST_QUERY} from '../utils';
+import {CUSTOMER_FRAGMENT, MESSAGE_FRAGMENT, WAITLIST_QUERY} from '../utils';
 import {FaArrowRight} from 'react-icons/fa';
 import {format} from 'phone-fns';
 import {gql} from '@apollo/client';
@@ -20,27 +20,25 @@ const ON_CUSTOMER_ADDED = gql`
   ${CUSTOMER_FRAGMENT}
 `;
 
+const ON_CUSTOMER_UPDATED = gql`
+  subscription OnCustomerUpdated {
+    customerUpdated {
+      id
+      messages {
+        ...MessageFragment
+      }
+    }
+  }
+  ${MESSAGE_FRAGMENT}
+`;
+
 const ON_CUSTOMER_REMOVED = gql`
   subscription OnCustomerRemoved {
     customerRemoved {
-      ...CustomerFragment
+      id
     }
   }
-  ${CUSTOMER_FRAGMENT}
 `;
-
-function updateQuery(prev, {subscriptionData}) {
-  const {customerServed, customerRemoved} = subscriptionData.data;
-  return {
-    ...prev,
-    organization: {
-      ...prev.organization,
-      customers: prev.organization.customers.filter(
-        customer => customer.id !== (customerServed || customerRemoved).id
-      )
-    }
-  };
-}
 
 export default function Waitlist({
   customers,
@@ -61,40 +59,46 @@ export default function Waitlist({
     })
   );
 
-  useEffectOnce(() =>
-    subscribeToMore({
-      document: ON_CUSTOMER_SERVED,
-      updateQuery
-    })
-  );
+  useEffectOnce(() => subscribeToMore({document: ON_CUSTOMER_UPDATED}));
 
   useEffectOnce(() =>
     subscribeToMore({
       document: ON_CUSTOMER_REMOVED,
-      updateQuery
+      updateQuery: (prev, {subscriptionData}) => ({
+        ...prev,
+        organization: {
+          ...prev.organization,
+          customers: prev.organization.customers.filter(
+            customer => customer.id !== subscriptionData.data.customerRemoved.id
+          )
+        }
+      })
     })
   );
 
-  function update(cache, result) {
-    const queryOptions = {
-      query: WAITLIST_QUERY,
-      variables: {
-        organizationId
-      }
-    };
-
-    const data = cache.readQuery(queryOptions);
-    cache.writeQuery({
-      ...queryOptions,
-      data: {
-        ...data,
-        me: {
-          ...data.me,
-          nowServing: result.data.serveCustomer
+  const update = useCallback(
+    (cache, result) => {
+      const queryOptions = {
+        query: WAITLIST_QUERY,
+        variables: {
+          organizationId
         }
-      }
-    });
-  }
+      };
+
+      const data = cache.readQuery(queryOptions);
+      cache.writeQuery({
+        ...queryOptions,
+        data: {
+          ...data,
+          me: {
+            ...data.me,
+            nowServing: result.data.serveCustomer
+          }
+        }
+      });
+    },
+    [organizationId]
+  );
 
   return (
     <>

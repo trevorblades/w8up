@@ -3,17 +3,25 @@ import {gql} from '@apollo/client';
 
 export const LogOutContext = createContext();
 
+export const MESSAGE_FRAGMENT = gql`
+  fragment MessageFragment on Message {
+    id
+    text
+    sentAt
+  }
+`;
+
 export const CUSTOMER_FRAGMENT = gql`
   fragment CustomerFragment on Customer {
     id
     name
     phone
     waitingSince
-    servedAt
-    servedBy {
-      name
+    messages {
+      ...MessageFragment
     }
   }
+  ${MESSAGE_FRAGMENT}
 `;
 
 export const ORGANIZATION_FRAGMENT = gql`
@@ -50,33 +58,17 @@ export const WAITLIST_QUERY = gql`
     organization(id: $organizationId) {
       ...OrganizationFragment
       customers(served: false) {
-        id
-        name
-        phone
-        waitingSince
-        messages {
-          id
-          text
-          sentAt
-        }
+        ...CustomerFragment
       }
     }
   }
   ${ORGANIZATION_FRAGMENT}
+  ${CUSTOMER_FRAGMENT}
 `;
 
 export const SERVE_CUSTOMER = gql`
   mutation ServeCustomer($id: ID!) {
     serveCustomer(id: $id) {
-      ...CustomerFragment
-    }
-  }
-  ${CUSTOMER_FRAGMENT}
-`;
-
-export const ON_CUSTOMER_SERVED = gql`
-  subscription OnCustomerServed {
-    customerServed {
       ...CustomerFragment
     }
   }
