@@ -122,24 +122,6 @@ const client = twilio(
   process.env.TWILIO_AUTH_TOKEN
 );
 
-async function findOrCreateCustomer({db, user, source}) {
-  if (user.customerId) {
-    return stripe.customers.retrieve(user.customerId);
-  }
-
-  const customer = await stripe.customers.create({
-    email: user.email,
-    name: user.name,
-    source
-  });
-
-  await db('users')
-    .update('customerId', customer.id)
-    .where('id', user.id);
-
-  return customer;
-}
-
 export const resolvers = {
   DateTime: GraphQLDateTime,
   Query: {
@@ -252,17 +234,27 @@ export const resolvers = {
       return customerRemoved;
     },
     async createOrganization(parent, {input}, {db, user}) {
-      const customer = await findOrCreateCustomer({
-        db,
-        user,
-        source: input.source
-      });
+      let {customerId} = user;
+      if (!customerId) {
+        const customer = await stripe.customers.create({
+          email: user.email,
+          name: user.name,
+          source: input.source
+        });
+
+        await db('users')
+          .update('customerId', customer.id)
+          .where('id', user.id);
+
+        customerId = customer.id;
+      }
 
       const subscription = await stripe.subscriptions.create({
-        customer: customer.id,
+        customer: customerId,
         items: [{plan: input.plan}]
       });
 
+      // TODO: create twilio subaccount
       // TODO: register phone number
 
       const [organization] = await db('organizations')
