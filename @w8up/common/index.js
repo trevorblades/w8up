@@ -9,13 +9,14 @@ exports.createWelcomeMessage = (organization, peopleAhead) => {
   );
 
   return expand(organization.welcomeMessage, {
-    QUEUE_MESSAGE: peopleAhead
-      ? expand(organization.queueMessage, {
-          IS: pluralize('is', peopleAhead),
-          PERSON: pluralize(organization.person, peopleAhead, true),
-          ESTIMATED_WAIT_TIME: estimatedWaitTime
-        })
-      : organization.queueEmptyMessage,
+    QUEUE_MESSAGE:
+      peopleAhead > 0
+        ? expand(organization.queueMessage, {
+            IS: pluralize('is', peopleAhead),
+            PERSON: pluralize(organization.person, peopleAhead, true),
+            ESTIMATED_WAIT_TIME: estimatedWaitTime
+          })
+        : organization.queueEmptyMessage,
     KEYWORD: organization.keyword
   });
 };
