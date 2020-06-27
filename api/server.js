@@ -57,74 +57,74 @@ app.post('/sms', async (req, res) => {
     .where('phone', req.body.To)
     .first();
 
-  if (
-    req.body.Body.trim().toUpperCase() ===
-    organization.keyword.trim().toUpperCase()
-  ) {
-    const condition = {
-      servedAt: null,
-      phone: req.body.From,
-      organizationId: organization.id
-    };
+  switch (req.body.Body.trim().toLowerCase()) {
+    case organization.keyword.trim().toLowerCase(): {
+      const condition = {
+        servedAt: null,
+        phone: req.body.From,
+        organizationId: organization.id
+      };
 
-    const matches = await db('customers').where(condition);
+      const matches = await db('customers').where(condition);
 
-    if (matches.length) {
-      const [customerRemoved] = await db('customers')
-        .where(condition)
-        .del()
-        .returning('*');
+      if (matches.length) {
+        const [customerRemoved] = await db('customers')
+          .where(condition)
+          .del()
+          .returning('*');
 
-      twiml.message(organization.removedMessage);
-      pubsub.publish(CUSTOMER_REMOVED, {customerRemoved});
-    } else {
-      twiml.message(organization.notRemovedMessage);
-    }
-  } else {
-    if (organization.accepting) {
-      const customer = await db('customers')
-        .where({
-          servedAt: null,
-          phone: req.body.From,
-          organizationId: organization.id
-        })
-        .first();
-
-      if (customer) {
-        await db('messages').insert({
-          text: req.body.Body,
-          customerId: customer.id
-        });
-
-        pubsub.publish(CUSTOMER_UPDATED, {customerUpdated: customer});
-
-        return;
+        twiml.message(organization.removedMessage);
+        pubsub.publish(CUSTOMER_REMOVED, {customerRemoved});
+      } else {
+        twiml.message(organization.notRemovedMessage);
       }
-
-      const {count: peopleAhead} = await db('customers')
-        .count('id')
-        .whereNull('servedAt')
-        .andWhere('organizationId', organization.id)
-        .first();
-
-      if (peopleAhead < organization.queueLimit) {
-        const message = createWelcomeMessage(organization, peopleAhead);
-        twiml.message(message);
-
-        const [customerAdded] = await db('customers')
-          .insert({
-            name: req.body.Body,
+      break;
+    }
+    default: {
+      if (organization.accepting) {
+        const customer = await db('customers')
+          .where({
+            servedAt: null,
             phone: req.body.From,
             organizationId: organization.id
           })
-          .returning('*');
+          .first();
 
-        pubsub.publish(CUSTOMER_ADDED, {customerAdded});
+        if (customer) {
+          await db('messages').insert({
+            text: req.body.Body,
+            customerId: customer.id
+          });
+
+          pubsub.publish(CUSTOMER_UPDATED, {customerUpdated: customer});
+          return;
+        }
+
+        const {count: peopleAhead} = await db('customers')
+          .count('id')
+          .whereNull('servedAt')
+          .andWhere('organizationId', organization.id)
+          .first();
+
+        if (peopleAhead < organization.queueLimit) {
+          const message = createWelcomeMessage(organization, peopleAhead);
+          twiml.message(message);
+
+          const [customerAdded] = await db('customers')
+            .insert({
+              name: req.body.Body,
+              phone: req.body.From,
+              organizationId: organization.id
+            })
+            .returning('*');
+
+          pubsub.publish(CUSTOMER_ADDED, {customerAdded});
+        } else {
+          twiml.message(organization.limitExceededMessage);
+        }
       } else {
-        twiml.message(organization.limitExceededMessage);
+        twiml.message(organization.notAcceptingMessage);
       }
-    } else {
-      twiml.message(organization.notAcceptingMessage);
     }
   }
 
