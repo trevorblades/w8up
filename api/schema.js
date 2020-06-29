@@ -254,14 +254,32 @@ export const resolvers = {
         items: [{plan: input.plan}]
       });
 
-      // TODO: create twilio subaccount
-      // TODO: register phone number
+      const {phoneNumber} = await client.incomingPhoneNumbers.create({
+        phoneNumber: input.phone
+      });
 
       const [organization] = await db('organizations')
         .insert({
           name: input.name,
-          phone: input.phone,
-          owner: user.id,
+          phone: phoneNumber,
+          queueLimit: 20,
+          activeAgents: 3,
+          averageHandleTime: 20,
+          keyword: 'REMOVE',
+          person: 'person',
+          welcomeMessage:
+            'Hello! You are on the list. {QUEUE_MESSAGE} We will text you when you\'re up next. Reply "{KEYWORD}" at any time to remove yourself from the list.',
+          queueMessage:
+            'There {IS} {PERSON} ahead of you. The approximate wait time is {ESTIMATED_WAIT_TIME} minutes.',
+          queueEmptyMessage: 'There is nobody ahead of you.',
+          notAcceptingMessage:
+            'We have stopped accepting customers for today. Please visit our website for our store hours.',
+          readyMessage:
+            "We're ready to serve you now. Please head over within the next 5 minutes.",
+          removedMessage: 'You have been removed from the list.',
+          notRemovedMessage: 'You are not on the list.',
+          limitExceededMessage:
+            'The list is currently full. Please try again later.',
           subscriptionId: subscription.id,
           accepting: false
         })
@@ -269,20 +287,26 @@ export const resolvers = {
 
       await db('members').insert({
         userId: user.id,
-        organizationId: organization.id
+        organizationId: organization.id,
+        admin: true
       });
 
       return organization;
     },
     async updateOrganization(parent, args, {db, user}) {
+      const {id, ...input} = args.input;
+      const isToggling =
+        'accepting' in input && Object.keys(input).length === 1;
+
+      const where = {userId: user.id};
+      if (!isToggling) {
+        where.admin = true;
+      }
+
       const organizations = await db('members')
-        .where({
-          admin: true,
-          userId: user.id
-        })
+        .where(where)
         .pluck('organizationId');
 
-      const {id, ...input} = args.input;
       if (!organizations.includes(id)) {
         throw new ForbiddenError('You do not have access to this organization');
       }
@@ -292,7 +316,9 @@ export const resolvers = {
         .update(input)
         .returning('*');
 
-      pubsub.publish(ORGANIZATION_UPDATED, {organizationUpdated});
+      if (isToggling) {
+        pubsub.publish(ORGANIZATION_UPDATED, {organizationUpdated});
+      }
 
       return organizationUpdated;
     }

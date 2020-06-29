@@ -53,7 +53,10 @@ export default function Waitlist({
         ...prev,
         organization: {
           ...prev.organization,
-          customers: [subscriptionData.data.customerAdded, ...prev.customers]
+          customers: [
+            subscriptionData.data.customerAdded,
+            ...prev.organization.customers
+          ]
         }
       })
     })
@@ -182,7 +185,7 @@ export default function Waitlist({
 
 Waitlist.propTypes = {
   subscribeToMore: PropTypes.func.isRequired,
-  nowServing: PropTypes.object.isRequired,
+  nowServing: PropTypes.object,
   organizationId: PropTypes.string.isRequired,
   customers: PropTypes.array.isRequired
 };
