@@ -1,8 +1,17 @@
-import CreateOrgButton from './CreateOrgButton';
+import CreateOrgButton, {BUTTON_PROPS} from './CreateOrgButton';
 import CreateOrgForm from './CreateOrgForm';
 import React from 'react';
 import UserStatus from './UserStatus';
-import {Box, Button, Flex, Heading, Spinner, Text} from '@chakra-ui/core';
+import {
+  Badge,
+  Box,
+  Button,
+  Grid,
+  Heading,
+  Spinner,
+  Stack,
+  Text
+} from '@chakra-ui/core';
 import {Elements} from '@stripe/react-stripe-js';
 import {Link as GatsbyLink} from 'gatsby';
 import {LIST_ORGANIZATIONS} from '../utils';
@@ -27,21 +36,33 @@ export default function AppInner() {
   }
 
   return (
-    <Box w="full" maxW="containers.sm" m="auto">
+    <Box w="full" maxW="containers.md" m="auto">
       <Elements stripe={stripePromise}>
         {data.organizations.length ? (
-          <Flex>
+          <Grid gap="4" templateColumns="repeat(auto-fill, minmax(200px, 1fr))">
             {data.organizations.map(organization => (
               <Button
+                {...BUTTON_PROPS}
+                p="5"
                 as={GatsbyLink}
                 to={`/app/o/${organization.id}`}
                 key={organization.id}
               >
-                {organization.name}
+                <Stack spacing="1" align="center">
+                  <Text>{organization.name}</Text>
+                  <Text fontSize="md" fontWeight="normal" color="gray.500">
+                    {organization.phone}
+                  </Text>
+                  <Badge
+                    variantColor={organization.accepting ? 'green' : 'red'}
+                  >
+                    {organization.accepting ? 'On' : 'Off'}
+                  </Badge>
+                </Stack>
               </Button>
             ))}
             <CreateOrgButton defaultSource={data.me.defaultSource} />
-          </Flex>
+          </Grid>
         ) : (
           <>
             <Heading fontSize="3xl">Create an organization</Heading>
