@@ -6,8 +6,8 @@ import {LogOutContext} from '../utils';
 export default function UserStatus(props) {
   const logOut = useContext(LogOutContext);
   return (
-    <Flex align="center" justify="center">
-      <Text>Logged in as {props.user.name}</Text>
+    <Flex mt="4" align="center" justify="center">
+      <Text mr="4">Logged in as {props.user.name}</Text>
       <Button onClick={logOut}>Log out</Button>
     </Flex>
   );

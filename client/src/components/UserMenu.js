@@ -35,15 +35,7 @@ export default function UserMenu(props) {
   return (
     <>
       <Menu>
-        <MenuButton
-          as={Button}
-          color="white"
-          variant="ghost"
-          size="sm"
-          px="none"
-          _hover={{bg: 'gray.800'}}
-          _active={{bg: 'gray.700'}}
-        >
+        <MenuButton as={Button} variant="ghost" size="sm" px="none">
           <Avatar mr="2" size="sm" fontSize="md" name={props.user.name} />
           <FaCaretDown />
         </MenuButton>

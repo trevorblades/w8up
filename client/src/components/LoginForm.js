@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, {useState} from 'react';
 import {Box, Button, Flex, Heading, Input, Stack, Text} from '@chakra-ui/core';
+import {ReactComponent as Logo} from '../assets/logo.svg';
 
 export default function LoginForm(props) {
   const [loading, setLoading] = useState(false);
@@ -41,9 +42,7 @@ export default function LoginForm(props) {
         p="10"
         maxW={{md: 400}}
       >
-        <Heading mb="8" textAlign="center" fontSize="4xl">
-          🎱 W8UP
-        </Heading>
+        <Box as={Logo} h="12" mb="8" mx="auto" />
         <Stack spacing="4">
           {error && <Text color="red.500">{error}</Text>}
           <Input

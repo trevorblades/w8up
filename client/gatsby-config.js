@@ -4,6 +4,13 @@ module.exports = {
   plugins: [
     'gatsby-plugin-react-helmet',
     'gatsby-theme-apollo',
+    'gatsby-plugin-svgr',
+    {
+      resolve: 'gatsby-plugin-manifest',
+      options: {
+        icon: 'src/assets/icon.svg'
+      }
+    },
     {
       resolve: 'gatsby-plugin-chakra-ui',
       options: {

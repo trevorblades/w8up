@@ -36,7 +36,7 @@ export default function AppInner() {
   }
 
   return (
-    <Box w="full" maxW="containers.md" m="auto">
+    <Box w="full" maxW="containers.md" m="auto" p="8">
       <Elements stripe={stripePromise}>
         {data.organizations.length ? (
           <Grid gap="4" templateColumns="repeat(auto-fill, minmax(200px, 1fr))">

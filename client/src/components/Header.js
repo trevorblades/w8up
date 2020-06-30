@@ -1,25 +1,31 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {Flex, Heading, Link} from '@chakra-ui/core';
+import {Box, Flex, Heading, Text} from '@chakra-ui/core';
 import {Link as GatsbyLink} from 'gatsby';
+import {ReactComponent as Logo} from '../assets/logo.svg';
 
 export default function Header(props) {
   return (
     <Flex
-      h="56px"
+      h="16"
       align="center"
       as="header"
       position="sticky"
       top="0"
       zIndex="sticky"
-      bg="gray.900"
+      bg="white"
+      borderBottomWidth="1px"
       px={[5, 6]}
     >
-      <Heading mr="auto" as="h1" fontSize="2xl" color="white">
-        <Link _hover={{textDecor: 'none'}} as={GatsbyLink} to="/">
-          W8UP
-        </Link>
-      </Heading>
+      <GatsbyLink to="/app">
+        <Box h="8" fill="currentColor" as={Logo} />
+      </GatsbyLink>
+      <Box ml="3" mr="auto">
+        <Heading fontSize="lg">Waitlist</Heading>
+        <Text color="gray.500" fontSize="sm" lineHeight="normal">
+          Sorrento Barbers
+        </Text>
+      </Box>
       {props.children}
     </Flex>
   );
