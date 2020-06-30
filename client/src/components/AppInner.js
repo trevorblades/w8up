@@ -40,12 +40,12 @@ export default function AppInner() {
                 {organization.name}
               </Button>
             ))}
-            <CreateOrgButton />
+            <CreateOrgButton defaultSource={data.me.defaultSource} />
           </Flex>
         ) : (
           <>
             <Heading fontSize="3xl">Create an organization</Heading>
-            <CreateOrgForm />
+            <CreateOrgForm defaultSource={data.me.defaultSource} />
           </>
         )}
       </Elements>

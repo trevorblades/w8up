@@ -28,6 +28,7 @@ export const ORGANIZATION_FRAGMENT = gql`
   fragment OrganizationFragment on Organization {
     id
     name
+    phone
     accepting
   }
 `;
@@ -37,12 +38,16 @@ export const LIST_ORGANIZATIONS = gql`
     me {
       id
       name
+      defaultSource {
+        last4
+        brand
+      }
     }
     organizations {
-      id
-      name
+      ...OrganizationFragment
     }
   }
+  ${ORGANIZATION_FRAGMENT}
 `;
 
 export const WAITLIST_QUERY = gql`

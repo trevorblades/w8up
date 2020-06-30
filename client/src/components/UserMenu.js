@@ -5,7 +5,6 @@ import {
   Avatar,
   Box,
   Button,
-  Link,
   Menu,
   MenuButton,
   MenuDivider,
@@ -20,7 +19,7 @@ import {
   Text,
   useToast
 } from '@chakra-ui/core';
-import {FaCaretDown, FaCog, FaSignOutAlt} from 'react-icons/fa';
+import {FaArrowLeft, FaCaretDown, FaCog, FaSignOutAlt} from 'react-icons/fa';
 import {Link as GatsbyLink} from 'gatsby';
 import {LogOutContext} from '../utils';
 
@@ -51,22 +50,28 @@ export default function UserMenu(props) {
         <MenuList shadow="lg" pt="none" placement="bottom-end">
           <Stack p="4" spacing="2" bg="gray.50" align="center">
             <Avatar name={props.user.name} />
-            <Box fontSize="sm" textAlign="center">
+            <Box textAlign="center">
               <Text>{props.user.name}</Text>
-              <Text color="gray.500">{props.user.email}</Text>
+              <Text fontSize="sm" color="gray.500">
+                {props.user.email}
+              </Text>
             </Box>
           </Stack>
           <MenuDivider mt="none" />
           <Box px="4" py="2">
-            <Text>{props.organization.name}</Text>
-            <Link fontSize="sm" color="blue.500" as={GatsbyLink} to="/app">
-              Change organization
-            </Link>
+            <Text fontWeight="medium">{props.organization.name}</Text>
+            <Text fontSize="sm" color="gray.500">
+              {props.organization.phone}
+            </Text>
           </Box>
           <MenuDivider />
           <MenuItem onClick={() => setModalOpen(true)}>
             <Box as={FaCog} mr="2" />
             Organization settings
+          </MenuItem>
+          <MenuItem as={GatsbyLink} to="/app">
+            <Box as={FaArrowLeft} mr="2" />
+            Change organization
           </MenuItem>
           <MenuItem onClick={logOut}>
             <Box as={FaSignOutAlt} mr="2" />

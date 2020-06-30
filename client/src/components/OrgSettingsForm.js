@@ -22,7 +22,6 @@ import {
   Text,
   Textarea
 } from '@chakra-ui/core';
-import {format} from 'phone-fns';
 import {gql, useMutation} from '@apollo/client';
 
 export const ORG_DETAILS_FRAGMENT = gql`
@@ -94,10 +93,7 @@ export default function OrgSettingsForm(props) {
         </FormControl>
         <FormControl>
           <FormLabel>SMS number</FormLabel>
-          <Input
-            value={format('(NNN) NNN-NNNN', organization.phone.slice(2))}
-            isDisabled
-          />
+          <Input value={organization.phone} isDisabled />
         </FormControl>
         <Grid gap="4" templateColumns="repeat(3, 1fr)">
           <FormControl>

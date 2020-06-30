@@ -36,8 +36,8 @@ export const typeDefs = gql`
   input CreateOrganizationInput {
     name: String!
     phone: String!
-    source: String!
     plan: String!
+    source: String
   }
 
   input UpdateOrganizationInput {
@@ -100,7 +100,13 @@ export const typeDefs = gql`
     id: ID!
     name: String!
     email: String!
+    defaultSource: Source
     nowServing: Customer
+  }
+
+  type Source {
+    last4: String!
+    brand: String!
   }
 
   type PhoneNumber {
@@ -247,6 +253,11 @@ export const resolvers = {
           .where('id', user.id);
 
         customerId = customer.id;
+      } else if (input.source) {
+        const card = await stripe.customers.createSource(customerId, {
+          source: input.source
+        });
+        await stripe.customers.update(customerId, {default_source: card.id});
       }
 
       const subscription = await stripe.subscriptions.create({
@@ -352,6 +363,16 @@ export const resolvers = {
     }
   },
   User: {
+    async defaultSource(user) {
+      if (!user.customerId) {
+        return null;
+      }
+
+      const customer = await stripe.customers.retrieve(user.customerId, {
+        expand: ['default_source']
+      });
+      return customer.default_source;
+    },
     nowServing: (user, args, {db}) =>
       db('customers')
         .where('servedBy', user.id)

@@ -9299,11 +9299,6 @@ knex@^0.21.1:
     uuid "^7.0.3"
     v8flags "^3.1.3"
 
-kyanite@1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/kyanite/-/kyanite-1.2.0.tgz#3505b573b9891730794fe8f6eecc9bf9dc21b6c8"
-  integrity sha512-X63LFe26OpFuH22r6EB2x3xjlYCBb3bqRp39OwI+E0gSWwjFq5XAA00um6c06Ev0pvFIQ26Ch9aFtVC09WqC4w==
-
 last-call-webpack-plugin@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/last-call-webpack-plugin/-/last-call-webpack-plugin-3.0.0.tgz#9742df0e10e3cf46e5c0381c2de90d3a7a2d7555"
@@ -10925,6 +10920,11 @@ path-type@^4.0.0:
   resolved "https://registry.yarnpkg.com/path-type/-/path-type-4.0.0.tgz#84ed01c0a7ba380afe09d90a8c180dcd9d03043b"
   integrity sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==
 
+payment-icons@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/payment-icons/-/payment-icons-1.2.1.tgz#7e4ea474a74fe320e0b57980db23c4db2bd42b04"
+  integrity sha512-nfIgiz/QoD63Gtv6VWYxJdUYDAJvh9B+MX3B2qJafVfyb4/Qx7O3K87pTJVeG1K0tOC+5eZPPnACVEaaQG7zxw==
+
 pbkdf2@^3.0.3:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/pbkdf2/-/pbkdf2-3.1.1.tgz#cb8724b0fada984596856d1a6ebafd3584654b94"
@@ -11002,13 +11002,6 @@ pgpass@1.x:
   integrity sha1-Knu0G2BltnkH6R2hsHwYR8h3swY=
   dependencies:
     split "^1.0.0"
-
-phone-fns@^3.2.1:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/phone-fns/-/phone-fns-3.2.1.tgz#3fd6536f2e1c69c08290fe8edd99c7db2608e983"
-  integrity sha512-KrPcwiv/SWxeSdDI2f5X/7SUD64XvtSDi8sYdYTYl2Wryi53YLx3YSP3iTk9Mrw2rejtqFqAM3KWLyFCSd6Lyw==
-  dependencies:
-    kyanite "1.2.0"
 
 physical-cpu-count@^2.0.0:
   version "2.0.0"

@@ -1,11 +1,16 @@
+import CardImage from './CardImage';
 import PhoneNumbers from './PhoneNumbers';
+import PropTypes from 'prop-types';
 import React, {Fragment, useState} from 'react';
 import {
   Box,
   Button,
+  Flex,
   FormControl,
   FormLabel,
   Input,
+  ModalBody,
+  ModalFooter,
   Radio,
   RadioGroup,
   Stack,
@@ -26,13 +31,18 @@ const CREATE_ORGANIZATION = gql`
   ${ORGANIZATION_FRAGMENT}
 `;
 
-export default function CreateOrgForm(props) {
+export default function CreateOrgForm({
+  defaultSource,
+  ButtonWrapper,
+  BodyWrapper
+}) {
   const stripe = useStripe();
   const elements = useElements();
   const {fonts, colors} = useTheme();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [phoneNumbersLoaded, setPhoneNumbersLoaded] = useState(false);
+  const [newCard, setNewCard] = useState(!defaultSource);
 
   const [createOrganization] = useMutation(CREATE_ORGANIZATION, {
     update(cache, result) {
@@ -69,23 +79,24 @@ export default function CreateOrgForm(props) {
 
     try {
       const {name, phone, plan} = event.target;
-      const element = elements.getElement(CardElement);
-      const result = await stripe.createToken(element);
+      const input = {
+        name: name.value,
+        phone: phone.value,
+        plan: plan.value
+      };
 
-      if (result.error) {
-        throw result.error;
+      const element = elements.getElement(CardElement);
+      if (element) {
+        const result = await stripe.createToken(element);
+
+        if (result.error) {
+          throw result.error;
+        }
+
+        input.source = result.token.id;
       }
 
-      await createOrganization({
-        variables: {
-          input: {
-            name: name.value,
-            phone: phone.value,
-            source: result.token.id,
-            plan: plan.value
-          }
-        }
-      });
+      await createOrganization({variables: {input}});
     } catch (error) {
       setError(error);
       setLoading(false);
@@ -94,7 +105,7 @@ export default function CreateOrgForm(props) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <props.bodyWrapper>
+      <BodyWrapper>
         <Stack spacing="4">
           {error && <Text color="red.500">{error.message}</Text>}
           <Input name="name" placeholder="Organization name" isRequired />
@@ -115,26 +126,52 @@ export default function CreateOrgForm(props) {
               ))}
             </RadioGroup>
           </FormControl>
-          <Box w="full" px="4" bg="white" rounded="md" borderWidth="1px">
-            <CardElement
-              options={{
-                style: {
-                  base: {
-                    lineHeight: '46px',
-                    fontFamily: fonts.body,
-                    fontSize: '18px',
-                    color: colors.gray[800],
-                    '::placeholder': {
-                      color: colors.gray[400]
+          {defaultSource && (
+            <FormControl>
+              <FormLabel>Payment method</FormLabel>
+              <RadioGroup
+                value={newCard.toString()}
+                onChange={event => setNewCard(event.target.value === 'true')}
+              >
+                <Radio value="false">
+                  <Flex align="center">
+                    <CardImage h="6" mr="2" brand={defaultSource.brand} />
+                    <Text
+                      fontFamily="mono"
+                      textTransform="uppercase"
+                      fontSize="lg"
+                      letterSpacing="wider"
+                    >
+                      xxxx xxxx xxxx {defaultSource.last4}
+                    </Text>
+                  </Flex>
+                </Radio>
+                <Radio value="true">Add new card</Radio>
+              </RadioGroup>
+            </FormControl>
+          )}
+          {newCard && (
+            <Box w="full" px="4" bg="white" rounded="md" borderWidth="1px">
+              <CardElement
+                options={{
+                  style: {
+                    base: {
+                      lineHeight: '38px',
+                      fontFamily: fonts.body,
+                      fontSize: '16px',
+                      color: colors.gray[800],
+                      '::placeholder': {
+                        color: colors.gray[400]
+                      }
                     }
                   }
-                }
-              }}
-            />
-          </Box>
+                }}
+              />
+            </Box>
+          )}
         </Stack>
-      </props.bodyWrapper>
-      <props.buttonWrapper>
+      </BodyWrapper>
+      <ButtonWrapper>
         <Button
           isDisabled={!stripe || !phoneNumbersLoaded}
           isLoading={loading}
@@ -142,12 +179,18 @@ export default function CreateOrgForm(props) {
         >
           Create organization
         </Button>
-      </props.buttonWrapper>
+      </ButtonWrapper>
     </form>
   );
 }
 
+CreateOrgForm.propTypes = {
+  defaultSource: PropTypes.object,
+  ButtonWrapper: PropTypes.oneOf([Fragment, ModalFooter]),
+  BodyWrapper: PropTypes.oneOf([Fragment, ModalBody])
+};
+
 CreateOrgForm.defaultProps = {
-  bodyWrapper: Fragment,
-  buttonWrapper: Fragment
+  BodyWrapper: Fragment,
+  ButtonWrapper: Fragment
 };

@@ -8,7 +8,6 @@ import useEffectOnce from 'react-use/lib/useEffectOnce';
 import {Box, Flex, List, ListItem, Stack, Text} from '@chakra-ui/core';
 import {CUSTOMER_FRAGMENT, MESSAGE_FRAGMENT, WAITLIST_QUERY} from '../utils';
 import {FaArrowRight} from 'react-icons/fa';
-import {format} from 'phone-fns';
 import {gql} from '@apollo/client';
 
 const ON_CUSTOMER_ADDED = gql`
@@ -118,7 +117,7 @@ export default function Waitlist({
               borderTopWidth={index && '1px'}
             >
               <Text fontSize="xl" fontWeight="medium">
-                {index + 1}. {format('(NNN) NNN-NNNN', customer.phone.slice(2))}
+                {index + 1}. {customer.phone}
               </Text>
               <Text>{customer.name}</Text>
               {customer.messages.map(message => (

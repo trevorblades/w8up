@@ -11,7 +11,7 @@ import {
   ModalOverlay
 } from '@chakra-ui/core';
 
-export default function CreateOrgButton() {
+export default function CreateOrgButton(props) {
   const [modalOpen, setModalOpen] = useState(false);
   return (
     <>
@@ -21,7 +21,11 @@ export default function CreateOrgButton() {
         <ModalContent>
           <ModalHeader>New organization</ModalHeader>
           <ModalCloseButton />
-          <CreateOrgForm bodyWrapper={ModalBody} buttonWrapper={ModalFooter} />
+          <CreateOrgForm
+            {...props}
+            BodyWrapper={ModalBody}
+            ButtonWrapper={ModalFooter}
+          />
         </ModalContent>
       </Modal>
     </>
