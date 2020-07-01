@@ -50,61 +50,68 @@ export default function UserMenu(props) {
             </Box>
           </Stack>
           <MenuDivider mt="none" />
-          <Box px="4" py="2">
-            <Text fontWeight="medium">{props.organization.name}</Text>
-            <Text fontSize="sm" color="gray.500">
-              {props.organization.phone}
-            </Text>
-          </Box>
-          <MenuDivider />
-          <MenuItem onClick={() => setModalOpen(true)}>
-            <Box as={FaCog} mr="2" />
-            Organization settings
-          </MenuItem>
-          <MenuItem as={GatsbyLink} to="/app">
-            <Box as={FaArrowLeft} mr="2" />
-            Change organization
-          </MenuItem>
+          {props.organization && (
+            <>
+              <Box px="4" py="2">
+                <Text fontWeight="medium">{props.organization.name}</Text>
+                <Text fontSize="sm" color="gray.500">
+                  {props.organization.phone}
+                </Text>
+              </Box>
+              <MenuDivider />
+              <MenuItem onClick={() => setModalOpen(true)}>
+                <Box as={FaCog} mr="2" />
+                Organization settings
+              </MenuItem>
+              <MenuItem as={GatsbyLink} to="/app">
+                <Box as={FaArrowLeft} mr="2" />
+                Change organization
+              </MenuItem>
+            </>
+          )}
           <MenuItem onClick={logOut}>
             <Box as={FaSignOutAlt} mr="2" />
             Log out
           </MenuItem>
         </MenuList>
       </Menu>
-      <Modal
-        closeOnOverlayClick={false}
-        size={['lg', 'xl', '2xl', '3xl']}
-        isOpen={modalOpen}
-        onClose={closeModal}
-      >
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Organization settings</ModalHeader>
-          <ModalCloseButton />
-          <OrgSettingsModalContent
-            onCompleted={() => {
-              closeModal();
-              toast({
-                duration: 3000,
-                status: 'success',
-                position: 'top',
-                title: 'Organization updated',
-                description: 'Your changes have been saved'
-              });
-            }}
-            queryOptions={{
-              variables: {
-                id: props.organization.id
-              }
-            }}
-          />
-        </ModalContent>
-      </Modal>
+      {/* TODO: only show org settings for admins */}
+      {props.organization && (
+        <Modal
+          closeOnOverlayClick={false}
+          size={['lg', 'xl', '2xl', '3xl']}
+          isOpen={modalOpen}
+          onClose={closeModal}
+        >
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Organization settings</ModalHeader>
+            <ModalCloseButton />
+            <OrgSettingsModalContent
+              onCompleted={() => {
+                closeModal();
+                toast({
+                  duration: 3000,
+                  status: 'success',
+                  position: 'top',
+                  title: 'Organization updated',
+                  description: 'Your changes have been saved'
+                });
+              }}
+              queryOptions={{
+                variables: {
+                  id: props.organization.id
+                }
+              }}
+            />
+          </ModalContent>
+        </Modal>
+      )}
     </>
   );
 }
 
 UserMenu.propTypes = {
   user: PropTypes.object.isRequired,
-  organization: PropTypes.object.isRequired
+  organization: PropTypes.object
 };

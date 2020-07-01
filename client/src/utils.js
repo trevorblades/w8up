@@ -33,11 +33,18 @@ export const ORGANIZATION_FRAGMENT = gql`
   }
 `;
 
+const USER_FRAGMENT = gql`
+  fragment UserFragment on User {
+    id
+    name
+    email
+  }
+`;
+
 export const LIST_ORGANIZATIONS = gql`
   query ListOrganizations {
     me {
-      id
-      name
+      ...UserFragment
       defaultSource {
         last4
         brand
@@ -47,15 +54,14 @@ export const LIST_ORGANIZATIONS = gql`
       ...OrganizationFragment
     }
   }
+  ${USER_FRAGMENT}
   ${ORGANIZATION_FRAGMENT}
 `;
 
 export const WAITLIST_QUERY = gql`
   query WaitlistQuery($organizationId: ID!) {
     me {
-      id
-      name
-      email
+      ...UserFragment
       nowServing {
         name
       }
@@ -67,6 +73,7 @@ export const WAITLIST_QUERY = gql`
       }
     }
   }
+  ${USER_FRAGMENT}
   ${ORGANIZATION_FRAGMENT}
   ${CUSTOMER_FRAGMENT}
 `;

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import UserMenu from './UserMenu';
 import Waitlist from './Waitlist';
-import {Box, Flex, Spinner, Text} from '@chakra-ui/core';
+import {Box, Flex, Heading, Spinner, Text} from '@chakra-ui/core';
 import {Helmet} from 'react-helmet';
 import {WAITLIST_QUERY} from '../utils';
 import {useQuery} from '@apollo/client';
@@ -35,6 +35,12 @@ export default function OrgInner({organizationId}) {
         <title>{data.organization.name}</title>
       </Helmet>
       <Header>
+        <Box mr="auto">
+          <Heading fontSize="lg">Waitlist</Heading>
+          <Text color="gray.500" fontSize="sm" lineHeight="normal">
+            {data.organization.name}
+          </Text>
+        </Box>
         <Flex mr="6" align="center">
           <Text mr="2">{data.organization.accepting ? 'On' : 'Off'}</Text>
           <AcceptingSwitch
