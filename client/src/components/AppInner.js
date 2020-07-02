@@ -3,7 +3,6 @@ import CreateOrgForm from './CreateOrgForm';
 import Header from './Header';
 import React from 'react';
 import UserMenu from './UserMenu';
-import UserStatus from './UserStatus';
 import {
   Badge,
   Box,
@@ -44,7 +43,7 @@ export default function AppInner() {
         <title>Organizations</title>
       </Helmet>
       <Header>
-        <Heading mr="auto" fontSize="2xl">
+        <Heading mr="auto" fontSize="2xl" fontWeight="medium">
           Organizations
         </Heading>
         <UserMenu user={data.me} />
@@ -86,7 +85,6 @@ export default function AppInner() {
             </>
           )}
         </Elements>
-        <UserStatus user={data.me} />
       </Box>
     </>
   );

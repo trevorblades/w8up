@@ -18,7 +18,7 @@ export default function Header(props) {
       px={[5, 6]}
     >
       <Box mr="3" as={GatsbyLink} to="/app">
-        <Box h="8" fill="currentColor" as={Logo} />
+        <Box w="10" fill="currentColor" as={Logo} />
       </Box>
       {props.children}
     </Flex>

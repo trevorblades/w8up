@@ -36,7 +36,9 @@ export default function OrgInner({organizationId}) {
       </Helmet>
       <Header>
         <Box mr="auto">
-          <Heading fontSize="lg">Waitlist</Heading>
+          <Heading fontSize="xl" fontWeight="medium">
+            Waitlist
+          </Heading>
           <Text color="gray.500" fontSize="sm" lineHeight="normal">
             {data.organization.name}
           </Text>
