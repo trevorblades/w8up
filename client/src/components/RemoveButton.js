@@ -28,7 +28,6 @@ export default function RemoveButton({customer, ...props}) {
     <Button
       size="sm"
       variant="ghost"
-      color="gray.500"
       borderRadius="full"
       isLoading={loading}
       onClick={handleClick}

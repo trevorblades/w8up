@@ -53,7 +53,7 @@ export default function AppInner() {
                     p="3"
                     borderWidth="1px"
                     as={GatsbyLink}
-                    to={`/app/o/${organization.id}`}
+                    to={`/app/list/${organization.id}`}
                     key={organization.id}
                     _hover={{bg: 'gray.50'}}
                     _active={{bg: 'gray.100'}}

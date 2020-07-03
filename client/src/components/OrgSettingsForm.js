@@ -4,6 +4,7 @@ import React, {useState} from 'react';
 import isEqual from 'lodash.isequal';
 import omit from 'lodash.omit';
 import {
+  Box,
   Button,
   Divider,
   FormControl,
@@ -11,8 +12,6 @@ import {
   FormLabel,
   Grid,
   Input,
-  ModalBody,
-  ModalFooter,
   NumberDecrementStepper,
   NumberIncrementStepper,
   NumberInput,
@@ -20,7 +19,8 @@ import {
   NumberInputStepper,
   Stack,
   Text,
-  Textarea
+  Textarea,
+  useToast
 } from '@chakra-ui/core';
 import {gql, useMutation} from '@apollo/client';
 
@@ -54,11 +54,20 @@ const UPDATE_ORGANIZATION = gql`
 `;
 
 export default function OrgSettingsForm(props) {
+  const toast = useToast();
   const [organization, setOrganization] = useState(props.organization);
-  const [
-    updateOrganization,
-    {loading, error}
-  ] = useMutation(UPDATE_ORGANIZATION, {onCompleted: props.onCompleted});
+  const [updateOrganization, {loading, error}] = useMutation(
+    UPDATE_ORGANIZATION,
+    {
+      onCompleted() {
+        toast({
+          status: 'success',
+          title: 'Organization updated',
+          description: 'Your changes have been saved'
+        });
+      }
+    }
+  );
 
   function handleInputChange(event) {
     const {name, value} = event.target;
@@ -79,8 +88,13 @@ export default function OrgSettingsForm(props) {
   }
 
   return (
-    <form autoComplete="off" onSubmit={handleSubmit}>
-      <ModalBody as={Stack} spacing="4">
+    <Box
+      as="form"
+      maxW="container.md"
+      autoComplete="off"
+      onSubmit={handleSubmit}
+    >
+      <Stack spacing="4">
         {error && <Text color="red.500">{error.message}</Text>}
         <FormControl>
           <FormLabel>Organization name</FormLabel>
@@ -287,21 +301,18 @@ export default function OrgSettingsForm(props) {
           </Stack>
           <ChatPreview organization={organization} />
         </Grid>
-      </ModalBody>
-      <ModalFooter>
-        <Button
-          isDisabled={isEqual(props.organization, organization)}
-          type="submit"
-          isLoading={loading}
-        >
-          Save changes
-        </Button>
-      </ModalFooter>
-    </form>
+      </Stack>
+      <Button
+        isDisabled={isEqual(props.organization, organization)}
+        type="submit"
+        isLoading={loading}
+      >
+        Save changes
+      </Button>
+    </Box>
   );
 }
 
 OrgSettingsForm.propTypes = {
-  organization: PropTypes.object.isRequired,
-  onCompleted: PropTypes.func.isRequired
+  organization: PropTypes.object.isRequired
 };

@@ -33,7 +33,7 @@ export const ORGANIZATION_FRAGMENT = gql`
   }
 `;
 
-const USER_FRAGMENT = gql`
+export const USER_FRAGMENT = gql`
   fragment UserFragment on User {
     id
     name

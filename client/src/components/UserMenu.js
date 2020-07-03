@@ -1,4 +1,3 @@
-import OrgSettingsModalContent from './OrgSettingsModalContent';
 import PropTypes from 'prop-types';
 import React, {useContext} from 'react';
 import {
@@ -9,24 +8,15 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
-  Modal,
-  ModalCloseButton,
-  ModalContent,
-  ModalHeader,
-  ModalOverlay,
   Stack,
-  Text,
-  useDisclosure,
-  useToast
+  Text
 } from '@chakra-ui/core';
 import {FaArrowLeft, FaCaretDown, FaCog, FaSignOutAlt} from 'react-icons/fa';
 import {Link as GatsbyLink} from 'gatsby';
 import {LogOutContext} from '../utils';
 
 export default function UserMenu(props) {
-  const toast = useToast();
   const logOut = useContext(LogOutContext);
-  const {isOpen, onOpen, onClose} = useDisclosure();
 
   return (
     <>
@@ -56,7 +46,10 @@ export default function UserMenu(props) {
               </Box>
               <MenuDivider />
               {props.organization.isAdmin && (
-                <MenuItem onClick={onOpen}>
+                <MenuItem
+                  as={GatsbyLink}
+                  to={`/app/settings/${props.organization.id}`}
+                >
                   <Box as={FaCog} mr="2" />
                   Organization settings
                 </MenuItem>
@@ -73,38 +66,6 @@ export default function UserMenu(props) {
           </MenuItem>
         </MenuList>
       </Menu>
-      {props.organization?.isAdmin && (
-        <Modal
-          closeOnOverlayClick={false}
-          size="3xl"
-          isOpen={isOpen}
-          onClose={onClose}
-        >
-          <ModalOverlay>
-            <ModalContent>
-              <ModalHeader>Organization settings</ModalHeader>
-              <ModalCloseButton />
-              <OrgSettingsModalContent
-                onCompleted={() => {
-                  onClose();
-                  toast({
-                    duration: 3000,
-                    status: 'success',
-                    position: 'top',
-                    title: 'Organization updated',
-                    description: 'Your changes have been saved'
-                  });
-                }}
-                queryOptions={{
-                  variables: {
-                    id: props.organization.id
-                  }
-                }}
-              />
-            </ModalContent>
-          </ModalOverlay>
-        </Modal>
-      )}
     </>
   );
 }
