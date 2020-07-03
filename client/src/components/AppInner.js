@@ -1,19 +1,11 @@
-import CreateOrgButton, {BUTTON_PROPS} from './CreateOrgButton';
+import CreateOrgButton from './CreateOrgButton';
 import CreateOrgForm from './CreateOrgForm';
 import Header from './Header';
 import React from 'react';
 import UserMenu from './UserMenu';
-import {
-  Badge,
-  Box,
-  Button,
-  Grid,
-  Heading,
-  Spinner,
-  Stack,
-  Text
-} from '@chakra-ui/core';
+import {Badge, Box, Flex, Heading, Spinner, Stack, Text} from '@chakra-ui/core';
 import {Elements} from '@stripe/react-stripe-js';
+import {FiArrowRight} from 'react-icons/fi';
 import {Link as GatsbyLink} from 'gatsby';
 import {Helmet} from 'react-helmet';
 import {LIST_ORGANIZATIONS} from '../utils';
@@ -51,33 +43,41 @@ export default function AppInner() {
       <Box w="full" maxW="container.md" m="auto" p="8">
         <Elements stripe={stripePromise}>
           {data.organizations.length ? (
-            <Grid
-              gap="4"
-              templateColumns="repeat(auto-fill, minmax(200px, 1fr))"
-            >
-              {data.organizations.map(organization => (
-                <Button
-                  {...BUTTON_PROPS}
-                  p="5"
-                  as={GatsbyLink}
-                  to={`/app/o/${organization.id}`}
-                  key={organization.id}
-                >
-                  <Stack spacing="1" align="center">
-                    <Text>{organization.name}</Text>
-                    <Text fontSize="md" fontWeight="normal" color="gray.500">
-                      {organization.phone}
-                    </Text>
-                    <Badge
-                      colorScheme={organization.accepting ? 'green' : 'red'}
-                    >
-                      {organization.accepting ? 'On' : 'Off'}
-                    </Badge>
-                  </Stack>
-                </Button>
-              ))}
+            <>
+              <Stack mb="4">
+                {data.organizations.map(organization => (
+                  <Flex
+                    align="center"
+                    justify="space-between"
+                    borderRadius="lg"
+                    p="3"
+                    borderWidth="1px"
+                    as={GatsbyLink}
+                    to={`/app/o/${organization.id}`}
+                    key={organization.id}
+                    _hover={{bg: 'gray.50'}}
+                    _active={{bg: 'gray.100'}}
+                  >
+                    <div>
+                      <Flex align="center">
+                        <Text fontWeight="medium">{organization.name}</Text>
+                        <Badge
+                          ml="2"
+                          colorScheme={organization.accepting ? 'green' : 'red'}
+                        >
+                          {organization.accepting ? 'On' : 'Off'}
+                        </Badge>
+                      </Flex>
+                      <Text lineHeight="normal" fontSize="sm" color="gray.500">
+                        {organization.phone}
+                      </Text>
+                    </div>
+                    <Box as={FiArrowRight} fontSize="xl" mx="1" />
+                  </Flex>
+                ))}
+              </Stack>
               <CreateOrgButton defaultSource={data.me.defaultSource} />
-            </Grid>
+            </>
           ) : (
             <>
               <Heading fontSize="3xl">Create an organization</Heading>

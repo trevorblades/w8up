@@ -13,8 +13,9 @@ export default function Header(props) {
       position="sticky"
       top="0"
       bg="white"
+      zIndex="docked"
       borderBottomWidth="1px"
-      px={[5, 6]}
+      px={[4, 5]}
     >
       <Box mr="3" as={GatsbyLink} to="/app">
         <Box w="10" fill="currentColor" as={Logo} />

@@ -46,10 +46,10 @@ export default function OrgInner({organizationId}) {
       <Header>
         <Box mr="auto">
           <Heading fontSize="xl" fontWeight="medium">
-            Waitlist
+            {data.organization.name}
           </Heading>
           <Text color="gray.500" fontSize="sm" lineHeight="normal">
-            {data.organization.name}
+            {data.organization.phone}
           </Text>
         </Box>
         <Flex mr="6" align="center">

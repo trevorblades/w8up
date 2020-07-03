@@ -1,5 +1,5 @@
 import CreateOrgForm from './CreateOrgForm';
-import React, {useState} from 'react';
+import React from 'react';
 import {
   Button,
   Modal,
@@ -8,34 +8,18 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-  ModalOverlay
+  ModalOverlay,
+  useDisclosure
 } from '@chakra-ui/core';
 
-export const BUTTON_PROPS = {
-  h: 'auto',
-  size: 'lg',
-  variant: 'outline',
-  borderRadius: 'lg',
-  borderWidth: '2px',
-  borderColor: 'currentColor',
-  fontWeight: 'medium',
-  _hover: {bg: 'gray.50'},
-  _active: {bg: 'gray.100'}
-};
-
 export default function CreateOrgButton(props) {
-  const [modalOpen, setModalOpen] = useState(false);
+  const {isOpen, onOpen, onClose} = useDisclosure();
   return (
     <>
-      <Button
-        {...BUTTON_PROPS}
-        color="gray.400"
-        borderStyle="dashed"
-        onClick={() => setModalOpen(true)}
-      >
+      <Button isFullWidth size="lg" colorScheme="green" onClick={onOpen}>
         New organization
       </Button>
-      <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
+      <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay>
           <ModalContent>
             <ModalHeader>New organization</ModalHeader>

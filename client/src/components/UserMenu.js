@@ -1,10 +1,9 @@
 import OrgSettingsModalContent from './OrgSettingsModalContent';
 import PropTypes from 'prop-types';
-import React, {useContext, useState} from 'react';
+import React, {useContext} from 'react';
 import {
   Avatar,
   Box,
-  Button,
   Menu,
   MenuButton,
   MenuDivider,
@@ -17,6 +16,7 @@ import {
   ModalOverlay,
   Stack,
   Text,
+  useDisclosure,
   useToast
 } from '@chakra-ui/core';
 import {FaArrowLeft, FaCaretDown, FaCog, FaSignOutAlt} from 'react-icons/fa';
@@ -26,16 +26,12 @@ import {LogOutContext} from '../utils';
 export default function UserMenu(props) {
   const toast = useToast();
   const logOut = useContext(LogOutContext);
-  const [modalOpen, setModalOpen] = useState(false);
-
-  function closeModal() {
-    setModalOpen(false);
-  }
+  const {isOpen, onOpen, onClose} = useDisclosure();
 
   return (
     <>
       <Menu>
-        <MenuButton as={Button} variant="ghost" size="sm" px="0">
+        <MenuButton variant="ghost" size="sm" px="0">
           <Avatar mr="2" size="sm" fontSize="md" name={props.user.name} />
           <FaCaretDown />
         </MenuButton>
@@ -60,7 +56,7 @@ export default function UserMenu(props) {
               </Box>
               <MenuDivider />
               {props.organization.isAdmin && (
-                <MenuItem onClick={() => setModalOpen(true)}>
+                <MenuItem onClick={onOpen}>
                   <Box as={FaCog} mr="2" />
                   Organization settings
                 </MenuItem>
@@ -81,8 +77,8 @@ export default function UserMenu(props) {
         <Modal
           closeOnOverlayClick={false}
           size="3xl"
-          isOpen={modalOpen}
-          onClose={closeModal}
+          isOpen={isOpen}
+          onClose={onClose}
         >
           <ModalOverlay>
             <ModalContent>
@@ -90,7 +86,7 @@ export default function UserMenu(props) {
               <ModalCloseButton />
               <OrgSettingsModalContent
                 onCompleted={() => {
-                  closeModal();
+                  onClose();
                   toast({
                     duration: 3000,
                     status: 'success',

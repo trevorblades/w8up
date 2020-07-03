@@ -5,7 +5,15 @@ import RemoveButton from './RemoveButton';
 import ServeButton from './ServeButton';
 import Timer from './Timer';
 import useEffectOnce from 'react-use/lib/useEffectOnce';
-import {Box, Flex, List, ListItem, Stack, Text} from '@chakra-ui/core';
+import {
+  Box,
+  Flex,
+  List,
+  ListItem,
+  Stack,
+  StackDivider,
+  Text
+} from '@chakra-ui/core';
 import {CUSTOMER_FRAGMENT, MESSAGE_FRAGMENT, WAITLIST_QUERY} from '../utils';
 import {FaArrowRight} from 'react-icons/fa';
 import {gql} from '@apollo/client';
@@ -104,46 +112,50 @@ export default function Waitlist({
 
   return (
     <>
-      <List px={{lg: 6}}>
+      <List
+        as={Stack}
+        divider={<StackDivider />}
+        maxW="container.lg"
+        mx="auto"
+        w="full"
+        px={{lg: 5}}
+      >
         {customers.map((customer, index) => (
-          <ListItem mx="auto" maxW="container.lg" key={customer.id}>
-            {/* TODO: consider using a stack with divider */}
-            <Box
-              py={[3, 4]}
-              px={{
-                base: 5,
-                sm: 6,
-                lg: 0
-              }}
-              borderTopWidth={index && '1px'}
-            >
-              <Text fontSize="xl" fontWeight="medium">
-                {index + 1}. {customer.phone}
+          <ListItem
+            key={customer.id}
+            py={[3, 4]}
+            px={{
+              base: 4,
+              sm: 5,
+              lg: 0
+            }}
+          >
+            <Text fontSize="xl" fontWeight="medium">
+              {index + 1}. {customer.phone}
+            </Text>
+            <Text>{customer.name}</Text>
+            {customer.messages.map(message => (
+              <Text key={message.id}>{message.text}</Text>
+            ))}
+            <Stack align="center" direction="row" spacing="2" mt="3">
+              <ServeButton
+                mutationOptions={{
+                  update,
+                  variables: {
+                    id: customer.id
+                  }
+                }}
+              />
+              <RemoveButton customer={customer} />
+              <Text fontSize="sm" color="gray.500">
+                <Timer date={new Date(customer.waitingSince)} />
               </Text>
-              <Text>{customer.name}</Text>
-              {customer.messages.map(message => (
-                <Text key={message.id}>{message.text}</Text>
-              ))}
-              <Stack align="center" direction="row" spacing="2" mt="3">
-                <ServeButton
-                  mutationOptions={{
-                    update,
-                    variables: {
-                      id: customer.id
-                    }
-                  }}
-                />
-                <RemoveButton customer={customer} />
-                <Text fontSize="sm" color="gray.500">
-                  <Timer date={new Date(customer.waitingSince)} />
-                </Text>
-              </Stack>
-            </Box>
+            </Stack>
           </ListItem>
         ))}
       </List>
       <Box
-        px={[5, 6]}
+        px={[4, 5]}
         py="3"
         bg="gray.900"
         color="white"

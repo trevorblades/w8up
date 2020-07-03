@@ -293,7 +293,6 @@ export default function OrgSettingsForm(props) {
           isDisabled={isEqual(props.organization, organization)}
           type="submit"
           isLoading={loading}
-          colorScheme="green"
         >
           Save changes
         </Button>
