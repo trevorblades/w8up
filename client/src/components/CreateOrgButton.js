@@ -15,7 +15,7 @@ export const BUTTON_PROPS = {
   h: 'auto',
   size: 'lg',
   variant: 'outline',
-  rounded: 'lg',
+  borderRadius: 'lg',
   borderWidth: '2px',
   borderColor: 'currentColor',
   fontWeight: 'medium',
@@ -36,16 +36,17 @@ export default function CreateOrgButton(props) {
         New organization
       </Button>
       <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>New organization</ModalHeader>
-          <ModalCloseButton />
-          <CreateOrgForm
-            {...props}
-            BodyWrapper={ModalBody}
-            ButtonWrapper={ModalFooter}
-          />
-        </ModalContent>
+        <ModalOverlay>
+          <ModalContent>
+            <ModalHeader>New organization</ModalHeader>
+            <ModalCloseButton />
+            <CreateOrgForm
+              {...props}
+              BodyWrapper={ModalBody}
+              ButtonWrapper={ModalFooter}
+            />
+          </ModalContent>
+        </ModalOverlay>
       </Modal>
     </>
   );

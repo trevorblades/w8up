@@ -119,11 +119,13 @@ export default function CreateOrgForm({
           <FormControl>
             <FormLabel>Payment options</FormLabel>
             <RadioGroup defaultValue={allStripePlan.nodes[0].id} name="plan">
-              {allStripePlan.nodes.map(plan => (
-                <Radio key={plan.id} value={plan.id}>
-                  ${plan.amount / 100} per {plan.interval}
-                </Radio>
-              ))}
+              <Stack>
+                {allStripePlan.nodes.map(plan => (
+                  <Radio key={plan.id} value={plan.id}>
+                    ${plan.amount / 100} per {plan.interval}
+                  </Radio>
+                ))}
+              </Stack>
             </RadioGroup>
           </FormControl>
           {defaultSource && (
@@ -131,27 +133,28 @@ export default function CreateOrgForm({
               <FormLabel>Payment method</FormLabel>
               <RadioGroup
                 value={newCard.toString()}
-                onChange={event => setNewCard(event.target.value === 'true')}
+                onChange={value => setNewCard(value === 'true')}
               >
-                <Radio value="false">
-                  <Flex align="center">
-                    <CardImage h="6" mr="2" brand={defaultSource.brand} />
-                    <Text
-                      fontFamily="mono"
-                      textTransform="uppercase"
-                      fontSize="lg"
-                      letterSpacing="wider"
-                    >
-                      xxxx xxxx xxxx {defaultSource.last4}
-                    </Text>
-                  </Flex>
-                </Radio>
-                <Radio value="true">Add new card</Radio>
+                <Stack>
+                  <Radio value="false">
+                    <Flex align="center">
+                      <CardImage h="6" mr="2" brand={defaultSource.brand} />
+                      <Text
+                        fontFamily="mono"
+                        textTransform="uppercase"
+                        letterSpacing="wider"
+                      >
+                        xxxx xxxx xxxx {defaultSource.last4}
+                      </Text>
+                    </Flex>
+                  </Radio>
+                  <Radio value="true">Add new card</Radio>
+                </Stack>
               </RadioGroup>
             </FormControl>
           )}
           {newCard && (
-            <Box w="full" px="4" bg="white" rounded="md" borderWidth="1px">
+            <Box w="full" px="4" bg="white" borderRadius="md" borderWidth="1px">
               <CardElement
                 options={{
                   style: {

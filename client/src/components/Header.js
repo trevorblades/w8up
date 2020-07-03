@@ -12,7 +12,6 @@ export default function Header(props) {
       as="header"
       position="sticky"
       top="0"
-      zIndex="sticky"
       bg="white"
       borderBottomWidth="1px"
       px={[5, 6]}

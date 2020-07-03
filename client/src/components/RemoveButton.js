@@ -29,7 +29,7 @@ export default function RemoveButton({customer, ...props}) {
       size="sm"
       variant="ghost"
       color="gray.500"
-      rounded="full"
+      borderRadius="full"
       isLoading={loading}
       onClick={handleClick}
       {...props}

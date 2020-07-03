@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {Radio, RadioGroup, Skeleton, Text} from '@chakra-ui/core';
+import {Radio, RadioGroup, Skeleton, Stack, Text} from '@chakra-ui/core';
 import {gql, useQuery} from '@apollo/client';
 
 const LIST_PHONE_NUMBERS = gql`
@@ -23,13 +23,15 @@ export default function PhoneNumbers({limit, onCompleted}) {
   if (loading) {
     return (
       <RadioGroup key="loading">
-        {Array(limit)
-          .fill('(000) 000-0000')
-          .map((number, index) => (
-            <Radio isDisabled key={index}>
-              <Skeleton>{number}</Skeleton>
-            </Radio>
-          ))}
+        <Stack>
+          {Array(limit)
+            .fill('(000) 000-0000')
+            .map((number, index) => (
+              <Radio isDisabled key={index}>
+                <Skeleton>{number}</Skeleton>
+              </Radio>
+            ))}
+        </Stack>
       </RadioGroup>
     );
   }
@@ -40,11 +42,13 @@ export default function PhoneNumbers({limit, onCompleted}) {
 
   return (
     <RadioGroup name="phone" defaultValue={data.phoneNumbers[0].phoneNumber}>
-      {data.phoneNumbers.map(phoneNumber => (
-        <Radio key={phoneNumber.phoneNumber} value={phoneNumber.phoneNumber}>
-          {phoneNumber.friendlyName}
-        </Radio>
-      ))}
+      <Stack>
+        {data.phoneNumbers.map(phoneNumber => (
+          <Radio key={phoneNumber.phoneNumber} value={phoneNumber.phoneNumber}>
+            {phoneNumber.friendlyName}
+          </Radio>
+        ))}
+      </Stack>
     </RadioGroup>
   );
 }

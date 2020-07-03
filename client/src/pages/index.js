@@ -27,7 +27,7 @@ export default function Home() {
             <Heading mb="6" fontSize="6xl">
               Low tech, SMS-based waitlist
             </Heading>
-            <Button as={GatsbyLink} to="/app" size="lg" variantColor="green">
+            <Button as={GatsbyLink} to="/app" size="lg" colorScheme="green">
               Log in
             </Button>
           </Box>

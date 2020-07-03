@@ -48,7 +48,7 @@ export default function AppInner() {
         </Heading>
         <UserMenu user={data.me} />
       </Header>
-      <Box w="full" maxW="containers.md" m="auto" p="8">
+      <Box w="full" maxW="container.md" m="auto" p="8">
         <Elements stripe={stripePromise}>
           {data.organizations.length ? (
             <Grid
@@ -69,7 +69,7 @@ export default function AppInner() {
                       {organization.phone}
                     </Text>
                     <Badge
-                      variantColor={organization.accepting ? 'green' : 'red'}
+                      colorScheme={organization.accepting ? 'green' : 'red'}
                     >
                       {organization.accepting ? 'On' : 'Off'}
                     </Badge>

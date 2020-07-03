@@ -23,7 +23,7 @@ export default function ChatBubble({fromThem, children, ...props}) {
   return (
     <Box
       bg={color}
-      rounded="25px"
+      borderRadius="25px"
       py="10px"
       maxW="255px"
       px="20px"

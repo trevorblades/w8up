@@ -25,22 +25,21 @@ export default function ChatPreview({organization}) {
     <Box
       w="150%"
       bg="white"
-      rounded="lg"
-      shadow="lg"
+      borderRadius="lg"
+      boxShadow="lg"
       overflow="hidden"
       position="sticky"
       top="16"
     >
       <Box py="3" px="4" bg="gray.900">
         <RadioGroup
-          isInline
-          color="white"
-          mb="2"
           value={removing.toString()}
-          onChange={event => setRemoving(event.target.value === 'true')}
+          onChange={value => setRemoving(value === 'true')}
         >
-          <Radio value="false">Name</Radio>
-          <Radio value="true">Remove keyword</Radio>
+          <Stack direction="row" color="white" mb="2">
+            <Radio value="false">Name</Radio>
+            <Radio value="true">Remove keyword</Radio>
+          </Stack>
         </RadioGroup>
         {removing ? (
           <Checkbox

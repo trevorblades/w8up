@@ -106,7 +106,8 @@ export default function Waitlist({
     <>
       <List px={{lg: 6}}>
         {customers.map((customer, index) => (
-          <ListItem mx="auto" maxW="containers.lg" key={customer.id}>
+          <ListItem mx="auto" maxW="container.lg" key={customer.id}>
+            {/* TODO: consider using a stack with divider */}
             <Box
               py={[3, 4]}
               px={{
@@ -123,7 +124,7 @@ export default function Waitlist({
               {customer.messages.map(message => (
                 <Text key={message.id}>{message.text}</Text>
               ))}
-              <Stack align="center" isInline spacing="2" mt="3">
+              <Stack align="center" direction="row" spacing="2" mt="3">
                 <ServeButton
                   mutationOptions={{
                     update,
@@ -150,7 +151,7 @@ export default function Waitlist({
         position="sticky"
         bottom="0"
       >
-        <Flex maxW="containers.lg" mx="auto" align="center">
+        <Flex maxW="container.lg" mx="auto" align="center">
           {nowServing && (
             <Box mr="4" overflow="hidden">
               <Text color="gray.500" fontWeight="medium" fontSize="sm">
@@ -163,10 +164,10 @@ export default function Waitlist({
           )}
           <NextButton
             size="lg"
-            rounded="full"
-            variantColor="green"
+            borderRadius="full"
+            colorScheme="green"
             ml="auto"
-            rightIcon={FaArrowRight}
+            rightIcon={<FaArrowRight />}
             flexShrink="0"
             isDisabled={!customers.length}
             mutationOptions={{

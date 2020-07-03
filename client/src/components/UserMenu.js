@@ -35,11 +35,11 @@ export default function UserMenu(props) {
   return (
     <>
       <Menu>
-        <MenuButton as={Button} variant="ghost" size="sm" px="none">
+        <MenuButton as={Button} variant="ghost" size="sm" px="0">
           <Avatar mr="2" size="sm" fontSize="md" name={props.user.name} />
           <FaCaretDown />
         </MenuButton>
-        <MenuList shadow="lg" pt="none" placement="bottom-end">
+        <MenuList boxShadow="lg" pt="0" placement="bottom-end">
           <Stack p="4" spacing="2" bg="gray.50" align="center">
             <Avatar name={props.user.name} />
             <Box textAlign="center">
@@ -49,7 +49,7 @@ export default function UserMenu(props) {
               </Text>
             </Box>
           </Stack>
-          <MenuDivider mt="none" />
+          <MenuDivider mt="0" />
           {props.organization && (
             <>
               <Box px="4" py="2">
@@ -77,36 +77,36 @@ export default function UserMenu(props) {
           </MenuItem>
         </MenuList>
       </Menu>
-      {/* TODO: only show org settings for admins */}
       {props.organization?.isAdmin && (
         <Modal
           closeOnOverlayClick={false}
-          size={['lg', 'xl', '2xl', '3xl']}
+          size="3xl"
           isOpen={modalOpen}
           onClose={closeModal}
         >
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>Organization settings</ModalHeader>
-            <ModalCloseButton />
-            <OrgSettingsModalContent
-              onCompleted={() => {
-                closeModal();
-                toast({
-                  duration: 3000,
-                  status: 'success',
-                  position: 'top',
-                  title: 'Organization updated',
-                  description: 'Your changes have been saved'
-                });
-              }}
-              queryOptions={{
-                variables: {
-                  id: props.organization.id
-                }
-              }}
-            />
-          </ModalContent>
+          <ModalOverlay>
+            <ModalContent>
+              <ModalHeader>Organization settings</ModalHeader>
+              <ModalCloseButton />
+              <OrgSettingsModalContent
+                onCompleted={() => {
+                  closeModal();
+                  toast({
+                    duration: 3000,
+                    status: 'success',
+                    position: 'top',
+                    title: 'Organization updated',
+                    description: 'Your changes have been saved'
+                  });
+                }}
+                queryOptions={{
+                  variables: {
+                    id: props.organization.id
+                  }
+                }}
+              />
+            </ModalContent>
+          </ModalOverlay>
         </Modal>
       )}
     </>

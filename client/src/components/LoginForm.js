@@ -62,7 +62,7 @@ export default function LoginForm(props) {
         </Stack>
         <Box textAlign="right" mt="6">
           <Button
-            variantColor="green"
+            colorScheme="green"
             isLoading={loading}
             size="lg"
             ml="auto"

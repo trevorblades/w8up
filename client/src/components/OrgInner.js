@@ -5,6 +5,7 @@ import React from 'react';
 import UserMenu from './UserMenu';
 import Waitlist from './Waitlist';
 import {Box, Button, Flex, Heading, Spinner, Text} from '@chakra-ui/core';
+import {FaArrowLeft} from 'react-icons/fa';
 import {Link as GatsbyLink} from 'gatsby';
 import {Helmet} from 'react-helmet';
 import {WAITLIST_QUERY} from '../utils';
@@ -30,7 +31,7 @@ export default function OrgInner({organizationId}) {
     return (
       <Box m="auto" textAlign="center">
         <Text color="red.500">{error.message}</Text>
-        <Button size="sm" leftIcon="arrow-back" as={GatsbyLink} to="/app">
+        <Button size="sm" leftIcon={<FaArrowLeft />} as={GatsbyLink} to="/app">
           Go back
         </Button>
       </Box>

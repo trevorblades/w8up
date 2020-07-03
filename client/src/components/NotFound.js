@@ -4,7 +4,7 @@ import {Box, Text} from '@chakra-ui/core';
 export default function NotFound() {
   return (
     <Box p={[5, 6]}>
-      <Box mx="auto" maxW="containers.lg">
+      <Box mx="auto" maxW="container.lg">
         <Text>Not found</Text>
       </Box>
     </Box>

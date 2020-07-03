@@ -45,7 +45,7 @@ export default function AcceptingSwitch({organization, subscribeToMore}) {
 
   return (
     <Switch
-      color="green"
+      colorScheme="green"
       display="flex"
       onChange={handleChange}
       isChecked={organization.accepting}

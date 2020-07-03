@@ -13,8 +13,8 @@ export default function ServeButton({mutationOptions, ...props}) {
 
   return (
     <Button
-      rounded="full"
-      leftIcon={FaCheckCircle}
+      borderRadius="full"
+      leftIcon={<FaCheckCircle />}
       size="sm"
       isLoading={loading}
       onClick={serveCustomer}
