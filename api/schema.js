@@ -93,6 +93,7 @@ export const typeDefs = gql`
     removedMessage: String!
     notRemovedMessage: String!
     limitExceededMessage: String!
+    isAdmin: Boolean!
     customers(served: Boolean!): [Customer!]!
   }
 
@@ -360,6 +361,15 @@ export const resolvers = {
       return served
         ? query.whereRaw('"servedAt" > now() - interval \'7 days\'')
         : query;
+    },
+    async isAdmin(organization, args, {db, user}) {
+      const [admin] = await db('members')
+        .where({
+          userId: user.id,
+          organizationId: organization.id
+        })
+        .pluck('admin');
+      return admin;
     }
   },
   User: {

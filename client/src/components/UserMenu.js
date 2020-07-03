@@ -59,10 +59,12 @@ export default function UserMenu(props) {
                 </Text>
               </Box>
               <MenuDivider />
-              <MenuItem onClick={() => setModalOpen(true)}>
-                <Box as={FaCog} mr="2" />
-                Organization settings
-              </MenuItem>
+              {props.organization.isAdmin && (
+                <MenuItem onClick={() => setModalOpen(true)}>
+                  <Box as={FaCog} mr="2" />
+                  Organization settings
+                </MenuItem>
+              )}
               <MenuItem as={GatsbyLink} to="/app">
                 <Box as={FaArrowLeft} mr="2" />
                 Change organization
@@ -76,7 +78,7 @@ export default function UserMenu(props) {
         </MenuList>
       </Menu>
       {/* TODO: only show org settings for admins */}
-      {props.organization && (
+      {props.organization?.isAdmin && (
         <Modal
           closeOnOverlayClick={false}
           size={['lg', 'xl', '2xl', '3xl']}

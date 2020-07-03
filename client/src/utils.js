@@ -68,6 +68,7 @@ export const WAITLIST_QUERY = gql`
     }
     organization(id: $organizationId) {
       ...OrganizationFragment
+      isAdmin
       customers(served: false) {
         ...CustomerFragment
       }
