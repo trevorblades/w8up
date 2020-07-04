@@ -11,7 +11,7 @@ import {
   Stack,
   Text
 } from '@chakra-ui/core';
-import {FaArrowLeft, FaCaretDown, FaCog, FaSignOutAlt} from 'react-icons/fa';
+import {FaArrowLeft, FaCaretDown, FaSignOutAlt} from 'react-icons/fa';
 import {Link as GatsbyLink} from 'gatsby';
 import {LogOutContext} from '../utils';
 
@@ -36,29 +36,11 @@ export default function UserMenu(props) {
             </Box>
           </Stack>
           <MenuDivider mt="0" />
-          {props.organization && (
-            <>
-              <Box px="4" py="2">
-                <Text fontWeight="medium">{props.organization.name}</Text>
-                <Text fontSize="sm" color="gray.500">
-                  {props.organization.phone}
-                </Text>
-              </Box>
-              <MenuDivider />
-              {props.organization.isAdmin && (
-                <MenuItem
-                  as={GatsbyLink}
-                  to={`/app/settings/${props.organization.id}`}
-                >
-                  <Box as={FaCog} mr="2" />
-                  Organization settings
-                </MenuItem>
-              )}
-              <MenuItem as={GatsbyLink} to="/app">
-                <Box as={FaArrowLeft} mr="2" />
-                Change organization
-              </MenuItem>
-            </>
+          {props.isViewingOrg && (
+            <MenuItem as={GatsbyLink} to="/app">
+              <Box as={FaArrowLeft} mr="2" />
+              Change organization
+            </MenuItem>
           )}
           <MenuItem onClick={logOut}>
             <Box as={FaSignOutAlt} mr="2" />
@@ -72,5 +54,5 @@ export default function UserMenu(props) {
 
 UserMenu.propTypes = {
   user: PropTypes.object.isRequired,
-  organization: PropTypes.object
+  isViewingOrg: PropTypes.bool
 };

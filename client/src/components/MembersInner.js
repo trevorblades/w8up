@@ -1,30 +1,16 @@
+import CreateMemberButton from './CreateMemberButton';
 import Header from './Header';
-import OrgSettingsForm, {DETAILS_FRAGMENT} from './OrgSettingsForm';
 import PropTypes from 'prop-types';
 import React from 'react';
 import TabMenu from './TabMenu';
 import UserMenu from './UserMenu';
-import {Box, Heading, Spinner, Text} from '@chakra-ui/core';
+import {Box, Heading, List, ListItem, Spinner, Text} from '@chakra-ui/core';
 import {Helmet} from 'react-helmet';
-import {USER_FRAGMENT} from '../utils';
-import {gql, useQuery} from '@apollo/client';
+import {LIST_MEMBERS} from '../utils';
+import {useQuery} from '@apollo/client';
 
-const GET_DETAILS = gql`
-  query GetDetails($organizationId: ID!) {
-    me {
-      ...UserFragment
-    }
-    organization(id: $organizationId) {
-      phone
-      ...DetailsFragment
-    }
-  }
-  ${USER_FRAGMENT}
-  ${DETAILS_FRAGMENT}
-`;
-
-export default function SettingsInner({organizationId}) {
-  const {data, loading, error} = useQuery(GET_DETAILS, {
+export default function MembersInner({organizationId}) {
+  const {data, loading, error} = useQuery(LIST_MEMBERS, {
     variables: {
       organizationId
     }
@@ -50,7 +36,7 @@ export default function SettingsInner({organizationId}) {
       <Header>
         <Box mr="auto">
           <Heading fontSize="xl" fontWeight="medium">
-            Organization settings
+            Configure members
           </Heading>
           <Text color="gray.500" fontSize="sm" lineHeight="normal">
             {data.organization.name}
@@ -58,12 +44,19 @@ export default function SettingsInner({organizationId}) {
         </Box>
         <UserMenu user={data.me} isViewingOrg />
       </Header>
-      <TabMenu index={1} organization={data.organization} />
-      <OrgSettingsForm organization={data.organization} />
+      <TabMenu index={2} organization={data.organization} />
+      <Box p={[4, 5]} w="full" maxW="container.lg" mx="auto">
+        <CreateMemberButton organizationId={organizationId} />
+        <List>
+          {data.organization.members.map(member => (
+            <ListItem key={member.id}>{member.name}</ListItem>
+          ))}
+        </List>
+      </Box>
     </>
   );
 }
 
-SettingsInner.propTypes = {
+MembersInner.propTypes = {
   organizationId: PropTypes.string.isRequired
 };

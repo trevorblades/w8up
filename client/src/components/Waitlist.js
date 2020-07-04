@@ -154,16 +154,8 @@ export default function Waitlist({
           </ListItem>
         ))}
       </List>
-      <Box
-        px={[4, 5]}
-        py="3"
-        bg="gray.900"
-        color="white"
-        mt="auto"
-        position="sticky"
-        bottom="0"
-      >
-        <Flex maxW="container.lg" mx="auto" align="center">
+      <Box bg="gray.900" color="white" mt="auto" position="sticky" bottom="0">
+        <Flex maxW="container.lg" mx="auto" px={[4, 5]} py="3" align="center">
           {nowServing && (
             <Box mr="4" overflow="hidden">
               <Text color="gray.500" fontWeight="medium" fontSize="sm">

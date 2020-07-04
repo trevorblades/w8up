@@ -1,4 +1,5 @@
 import Stripe from 'stripe';
+import bcrypt from 'bcryptjs';
 import twilio from 'twilio';
 import {
   ForbiddenError,
@@ -24,6 +25,7 @@ export const typeDefs = gql`
     removeCustomer(id: ID!): Customer
     createOrganization(input: CreateOrganizationInput!): Organization!
     updateOrganization(input: UpdateOrganizationInput!): Organization!
+    createMember(input: CreateMemberInput!): User!
   }
 
   type Subscription {
@@ -57,6 +59,13 @@ export const typeDefs = gql`
     removedMessage: String
     notRemovedMessage: String
     limitExceededMessage: String
+  }
+
+  input CreateMemberInput {
+    name: String!
+    username: String!
+    password: String!
+    organizationId: ID!
   }
 
   type Customer {
@@ -95,6 +104,7 @@ export const typeDefs = gql`
     limitExceededMessage: String!
     isAdmin: Boolean!
     customers(served: Boolean!): [Customer!]!
+    members: [User!]!
   }
 
   type User {
@@ -333,6 +343,36 @@ export const resolvers = {
       }
 
       return organizationUpdated;
+    },
+    async createMember(parent, {input}, {db, user}) {
+      const organizations = await db('members')
+        .where({
+          userId: user.id,
+          admin: true
+        })
+        .pluck('organizationId');
+
+      if (!organizations.includes(input.organizationId)) {
+        throw new ForbiddenError('You do not have access to this organization');
+      }
+
+      // TODO: consolidate/break apart email and username (make decision)
+
+      const salt = bcrypt.genSaltSync(10);
+      const [member] = await db('users')
+        .insert({
+          name: input.name,
+          email: input.username,
+          password: bcrypt.hashSync(input.password, salt)
+        })
+        .returning('*');
+
+      await db('members').insert({
+        userId: member.id,
+        organizationId: input.organizationId
+      });
+
+      return member;
     }
   },
   Customer: {
@@ -370,7 +410,11 @@ export const resolvers = {
         })
         .pluck('admin');
       return admin;
-    }
+    },
+    members: (organization, args, {db}) =>
+      db('users')
+        .join('members', 'users.id', '=', 'members.userId')
+        .where('members.organizationId', organization.id)
   },
   User: {
     async defaultSource(user) {

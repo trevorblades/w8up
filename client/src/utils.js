@@ -87,3 +87,19 @@ export const SERVE_CUSTOMER = gql`
   }
   ${CUSTOMER_FRAGMENT}
 `;
+
+export const LIST_MEMBERS = gql`
+  query ListMembers($organizationId: ID!) {
+    me {
+      ...UserFragment
+    }
+    organization(id: $organizationId) {
+      id
+      name
+      members {
+        ...UserFragment
+      }
+    }
+  }
+  ${USER_FRAGMENT}
+`;

@@ -23,13 +23,12 @@ export default function ChatPreview({organization}) {
   const [personOnList, setPersonOnList] = useState(true);
   return (
     <Box
-      w="150%"
       bg="white"
       borderRadius="lg"
       boxShadow="lg"
       overflow="hidden"
       position="sticky"
-      top="16"
+      top="20"
     >
       <Box py="3" px="4" bg="gray.900">
         <RadioGroup
@@ -55,7 +54,7 @@ export default function ChatPreview({organization}) {
             <NumberInput
               min={0}
               size="sm"
-              onChange={setPeopleAhead}
+              onChange={(string, num) => setPeopleAhead(num)}
               value={peopleAhead}
             >
               <NumberInputField />

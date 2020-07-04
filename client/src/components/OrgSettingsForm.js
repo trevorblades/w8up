@@ -18,14 +18,15 @@ import {
   NumberInputField,
   NumberInputStepper,
   Stack,
+  StackDivider,
   Text,
   Textarea,
   useToast
 } from '@chakra-ui/core';
 import {gql, useMutation} from '@apollo/client';
 
-export const ORG_DETAILS_FRAGMENT = gql`
-  fragment OrgDetailsFragment on Organization {
+export const DETAILS_FRAGMENT = gql`
+  fragment DetailsFragment on Organization {
     id
     name
     queueLimit
@@ -47,10 +48,10 @@ export const ORG_DETAILS_FRAGMENT = gql`
 const UPDATE_ORGANIZATION = gql`
   mutation UpdateOrganization($input: UpdateOrganizationInput!) {
     updateOrganization(input: $input) {
-      ...OrgDetailsFragment
+      ...DetailsFragment
     }
   }
-  ${ORG_DETAILS_FRAGMENT}
+  ${DETAILS_FRAGMENT}
 `;
 
 export default function OrgSettingsForm(props) {
@@ -88,104 +89,106 @@ export default function OrgSettingsForm(props) {
   }
 
   return (
-    <Box
-      as="form"
-      maxW="container.md"
-      autoComplete="off"
-      onSubmit={handleSubmit}
-    >
-      <Stack spacing="4">
+    <Box as="form" autoComplete="off" onSubmit={handleSubmit}>
+      <Stack
+        spacing="6"
+        divider={<StackDivider />}
+        maxW="container.lg"
+        p={[4, 5]}
+        mx="auto"
+      >
         {error && <Text color="red.500">{error.message}</Text>}
-        <FormControl>
-          <FormLabel>Organization name</FormLabel>
-          <Input
-            isRequired
-            name="name"
-            value={organization.name}
-            onChange={handleInputChange}
-          />
-        </FormControl>
-        <FormControl>
-          <FormLabel>SMS number</FormLabel>
-          <Input value={organization.phone} isDisabled />
-        </FormControl>
-        <Grid gap="4" templateColumns="repeat(3, 1fr)">
+        <Stack w={7 / 8} spacing="4">
           <FormControl>
-            <FormLabel>Queue limit</FormLabel>
-            <NumberInput
-              min={1}
-              max={100}
-              value={organization.queueLimit}
-              onChange={value =>
-                setOrganization(prevOrganization => ({
-                  ...prevOrganization,
-                  queueLimit: value
-                }))
-              }
-            >
-              <NumberInputField />
-              <NumberInputStepper>
-                <NumberIncrementStepper />
-                <NumberDecrementStepper />
-              </NumberInputStepper>
-            </NumberInput>
-            <FormHelperText>
-              Maximum number of people allowed on the waitlist at a time
-            </FormHelperText>
+            <FormLabel>Organization name</FormLabel>
+            <Input
+              required
+              name="name"
+              value={organization.name}
+              onChange={handleInputChange}
+            />
           </FormControl>
           <FormControl>
-            <FormLabel>Active agents</FormLabel>
-            <NumberInput
-              min={1}
-              value={organization.activeAgents}
-              onChange={value =>
-                setOrganization(prevOrganization => ({
-                  ...prevOrganization,
-                  activeAgents: value
-                }))
-              }
-            >
-              <NumberInputField />
-              <NumberInputStepper>
-                <NumberIncrementStepper />
-                <NumberDecrementStepper />
-              </NumberInputStepper>
-            </NumberInput>
-            <FormHelperText>
-              The number of people serving customers
-            </FormHelperText>
+            <FormLabel>SMS number</FormLabel>
+            <Input value={organization.phone} isDisabled />
           </FormControl>
-          <FormControl>
-            <FormLabel>Average handle time</FormLabel>
-            <NumberInput
-              min={1}
-              value={organization.averageHandleTime}
-              onChange={value =>
-                setOrganization(prevOrganization => ({
-                  ...prevOrganization,
-                  averageHandleTime: value
-                }))
-              }
-            >
-              <NumberInputField />
-              <NumberInputStepper>
-                <NumberIncrementStepper />
-                <NumberDecrementStepper />
-              </NumberInputStepper>
-            </NumberInput>
-            <FormHelperText>
-              The average amount of time (in minutes) to finish serving a
-              customer
-            </FormHelperText>
-          </FormControl>
-        </Grid>
-        <Divider />
+          <Grid gap="4" templateColumns="repeat(3, 1fr)">
+            <FormControl>
+              <FormLabel>Queue limit</FormLabel>
+              <NumberInput
+                min={1}
+                max={100}
+                value={organization.queueLimit}
+                onChange={(string, queueLimit) =>
+                  setOrganization(prevOrganization => ({
+                    ...prevOrganization,
+                    queueLimit
+                  }))
+                }
+              >
+                <NumberInputField />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+              <FormHelperText>
+                Maximum number of people allowed on the waitlist at a time
+              </FormHelperText>
+            </FormControl>
+            <FormControl>
+              <FormLabel>Active agents</FormLabel>
+              <NumberInput
+                min={1}
+                value={organization.activeAgents}
+                onChange={(string, activeAgents) =>
+                  setOrganization(prevOrganization => ({
+                    ...prevOrganization,
+                    activeAgents
+                  }))
+                }
+              >
+                <NumberInputField />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+              <FormHelperText>
+                The number of people serving customers
+              </FormHelperText>
+            </FormControl>
+            <FormControl>
+              <FormLabel>Average handle time</FormLabel>
+              <NumberInput
+                min={1}
+                value={organization.averageHandleTime}
+                onChange={(string, averageHandleTime) =>
+                  setOrganization(prevOrganization => ({
+                    ...prevOrganization,
+                    averageHandleTime
+                  }))
+                }
+              >
+                <NumberInputField />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+              <FormHelperText>
+                The average amount of time (in minutes) to finish serving a
+                customer
+              </FormHelperText>
+            </FormControl>
+          </Grid>
+        </Stack>
         <Grid alignItems="flex-start" gap="4" templateColumns="2fr 1fr">
           <Stack spacing="4">
             <FormControl>
               <FormLabel>Welcome message template</FormLabel>
               <Textarea
-                isRequired
+                required
                 resize="none"
                 name="welcomeMessage"
                 value={organization.welcomeMessage}
@@ -200,7 +203,7 @@ export default function OrgSettingsForm(props) {
                 QUEUE_MESSAGE when the <mark>queue is empty</mark>
               </FormLabel>
               <Input
-                isRequired
+                required
                 name="queueEmptyMessage"
                 value={organization.queueEmptyMessage}
                 onChange={handleInputChange}
@@ -211,7 +214,7 @@ export default function OrgSettingsForm(props) {
                 QUEUE_MESSAGE when there are <mark>people in the queue</mark>
               </FormLabel>
               <Textarea
-                isRequired
+                required
                 resize="none"
                 name="queueMessage"
                 value={organization.queueMessage}
@@ -225,7 +228,7 @@ export default function OrgSettingsForm(props) {
               <FormControl>
                 <FormLabel>KEYWORD variable</FormLabel>
                 <Input
-                  isRequired
+                  required
                   name="keyword"
                   value={organization.keyword}
                   onChange={handleInputChange}
@@ -238,7 +241,7 @@ export default function OrgSettingsForm(props) {
               <FormControl>
                 <FormLabel>PERSON variable</FormLabel>
                 <Input
-                  isRequired
+                  required
                   name="person"
                   value={organization.person}
                   onChange={handleInputChange}
@@ -253,7 +256,7 @@ export default function OrgSettingsForm(props) {
             <FormControl>
               <FormLabel>Not accepting message</FormLabel>
               <Textarea
-                isRequired
+                required
                 resize="none"
                 name="notAcceptingMessage"
                 value={organization.notAcceptingMessage}
@@ -263,7 +266,7 @@ export default function OrgSettingsForm(props) {
             <FormControl>
               <FormLabel>Ready to serve message</FormLabel>
               <Textarea
-                isRequired
+                required
                 resize="none"
                 name="readyMessage"
                 value={organization.readyMessage}
@@ -273,7 +276,7 @@ export default function OrgSettingsForm(props) {
             <FormControl>
               <FormLabel>Limit exceeded message</FormLabel>
               <Input
-                isRequired
+                required
                 name="limitExceededMessage"
                 value={organization.limitExceededMessage}
                 onChange={handleInputChange}
@@ -283,7 +286,7 @@ export default function OrgSettingsForm(props) {
             <FormControl>
               <FormLabel>Removed message</FormLabel>
               <Input
-                isRequired
+                required
                 name="removedMessage"
                 value={organization.removedMessage}
                 onChange={handleInputChange}
@@ -292,7 +295,7 @@ export default function OrgSettingsForm(props) {
             <FormControl>
               <FormLabel>Not removed message</FormLabel>
               <Input
-                isRequired
+                required
                 name="notRemovedMessage"
                 value={organization.notRemovedMessage}
                 onChange={handleInputChange}
@@ -302,13 +305,26 @@ export default function OrgSettingsForm(props) {
           <ChatPreview organization={organization} />
         </Grid>
       </Stack>
-      <Button
-        isDisabled={isEqual(props.organization, organization)}
-        type="submit"
-        isLoading={loading}
+      <Box
+        mt="auto"
+        position="sticky"
+        bottom="0"
+        zIndex="docked"
+        bg="whiteAlpha.800"
+        borderTopWidth="1px"
       >
-        Save changes
-      </Button>
+        <Box textAlign="right" maxW="container.lg" py="3" px={[4, 5]} mx="auto">
+          <Button
+            size="lg"
+            colorScheme="green"
+            isDisabled={isEqual(props.organization, organization)}
+            type="submit"
+            isLoading={loading}
+          >
+            Save changes
+          </Button>
+        </Box>
+      </Box>
     </Box>
   );
 }

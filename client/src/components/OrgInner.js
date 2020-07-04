@@ -2,6 +2,7 @@ import AcceptingSwitch from './AcceptingSwitch';
 import Header from './Header';
 import PropTypes from 'prop-types';
 import React from 'react';
+import TabMenu from './TabMenu';
 import UserMenu from './UserMenu';
 import Waitlist from './Waitlist';
 import {Box, Flex, Heading, Spinner, Text} from '@chakra-ui/core';
@@ -50,8 +51,11 @@ export default function OrgInner({organizationId}) {
             subscribeToMore={subscribeToMore}
           />
         </Flex>
-        <UserMenu user={data.me} organization={data.organization} />
+        <UserMenu user={data.me} isViewingOrg />
       </Header>
+      {data.organization.isAdmin && (
+        <TabMenu index={0} organization={data.organization} />
+      )}
       <Waitlist
         organizationId={organizationId}
         customers={data.organization.customers}

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, {useState} from 'react';
-import {Box, Button, Flex, Heading, Input, Stack, Text} from '@chakra-ui/core';
+import {Box, Button, Flex, Input, Stack, Text} from '@chakra-ui/core';
 import {ReactComponent as Logo} from '../assets/logo.svg';
 
 export default function LoginForm(props) {
@@ -48,13 +48,13 @@ export default function LoginForm(props) {
           <Input
             size="lg"
             autoFocus
-            isRequired
+            required
             placeholder="Username"
             name="username"
           />
           <Input
             size="lg"
-            isRequired
+            required
             placeholder="Password"
             type="password"
             name="password"
