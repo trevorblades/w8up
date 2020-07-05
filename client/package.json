@@ -2,7 +2,9 @@
   "name": "client",
   "version": "1.0.0",
   "scripts": {
-    "start": "gatsby develop"
+    "start": "gatsby develop",
+    "build": "gatsby build",
+    "serve": "gatsby serve"
   },
   "eslintConfig": {
     "extends": "@trevorblades/eslint-config/react"

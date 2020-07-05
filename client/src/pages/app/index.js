@@ -6,12 +6,12 @@ import RequireAuth from '../../components/RequireAuth';
 
 export default function App() {
   return (
-    <Layout>
-      <NoSsr>
+    <NoSsr>
+      <Layout>
         <RequireAuth>
           <AppInner />
         </RequireAuth>
-      </NoSsr>
-    </Layout>
+      </Layout>
+    </NoSsr>
   );
 }

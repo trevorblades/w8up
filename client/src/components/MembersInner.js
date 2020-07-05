@@ -28,6 +28,10 @@ export default function MembersInner({organizationId}) {
     return <Text color="red.500">{error.message}</Text>;
   }
 
+  if (!data.organization.isAdmin) {
+    return <Text>You do not have access to this page</Text>;
+  }
+
   return (
     <>
       <Helmet>

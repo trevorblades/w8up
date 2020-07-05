@@ -16,6 +16,7 @@ const GET_DETAILS = gql`
     }
     organization(id: $organizationId) {
       phone
+      isAdmin
       ...DetailsFragment
     }
   }
@@ -40,6 +41,10 @@ export default function SettingsInner({organizationId}) {
 
   if (error) {
     return <Text color="red.500">{error.message}</Text>;
+  }
+
+  if (!data.organization.isAdmin) {
+    return <Text>You do not have access to this page</Text>;
   }
 
   return (

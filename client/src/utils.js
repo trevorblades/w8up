@@ -96,6 +96,7 @@ export const LIST_MEMBERS = gql`
     organization(id: $organizationId) {
       id
       name
+      isAdmin
       members {
         ...UserFragment
       }
