@@ -10,7 +10,7 @@ export default function Header(props) {
     <Box as="header" position="sticky" top="0" zIndex="docked">
       <Flex h="16" align="center" bg="white" px={[4, 5]}>
         <Box mr="3" as={GatsbyLink} to="/app">
-          <Box w="10" fill="currentColor" as={Logo} />
+          <Box w="10" fill="current" as={Logo} />
         </Box>
         {props.children}
       </Flex>

@@ -4,7 +4,19 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TabMenu from './TabMenu';
 import UserMenu from './UserMenu';
-import {Box, Heading, List, ListItem, Spinner, Text} from '@chakra-ui/core';
+import {
+  Avatar,
+  Box,
+  Flex,
+  Heading,
+  IconButton,
+  List,
+  ListItem,
+  Spinner,
+  Stack,
+  Text
+} from '@chakra-ui/core';
+import {FaTimes} from 'react-icons/fa';
 import {Helmet} from 'react-helmet';
 import {LIST_MEMBERS} from '../utils';
 import {useQuery} from '@apollo/client';
@@ -39,9 +51,7 @@ export default function MembersInner({organizationId}) {
       </Helmet>
       <Header>
         <Box mr="auto">
-          <Heading fontSize="xl" fontWeight="medium">
-            Configure members
-          </Heading>
+          <Heading fontSize="xl">Configure members</Heading>
           <Text color="gray.500" fontSize="sm" lineHeight="normal">
             {data.organization.name}
           </Text>
@@ -50,12 +60,28 @@ export default function MembersInner({organizationId}) {
       </Header>
       <TabMenu index={2} organization={data.organization} />
       <Box p={[4, 5]} w="full" maxW="container.lg" mx="auto">
-        <CreateMemberButton organizationId={organizationId} />
-        <List>
+        <Flex mb="4" align="center" justify="space-between  ">
+          <Heading fontSize="2xl">
+            Members ({data.organization.members.length})
+          </Heading>
+          <CreateMemberButton organizationId={organizationId} />
+        </Flex>
+        <Stack as={List} spacing="3">
           {data.organization.members.map(member => (
-            <ListItem key={member.id}>{member.name}</ListItem>
+            <ListItem display="flex" alignItems="center" key={member.id}>
+              <Avatar mr="3" fontSize="md" name={member.name} size="sm" />
+              {member.name} &lt;{member.email}&gt;
+              {!member.isAdmin && (
+                <IconButton
+                  variant="ghost"
+                  ml="auto"
+                  size="sm"
+                  icon={<FaTimes />}
+                />
+              )}
+            </ListItem>
           ))}
-        </List>
+        </Stack>
       </Box>
     </>
   );

@@ -21,7 +21,7 @@ export default function UserMenu(props) {
   return (
     <>
       <Menu>
-        <MenuButton variant="ghost" size="sm" px="0">
+        <MenuButton variant="ghost" size="sm" h="auto" p="1">
           <Avatar mr="2" size="sm" fontSize="md" name={props.user.name} />
           <FaCaretDown />
         </MenuButton>
@@ -46,6 +46,9 @@ export default function UserMenu(props) {
             <Box as={FaSignOutAlt} mr="2" />
             Log out
           </MenuItem>
+          <Text mt="4" color="gray.500" textAlign="center" fontSize="sm">
+            &copy; {new Date().getFullYear()} Saucer
+          </Text>
         </MenuList>
       </Menu>
     </>

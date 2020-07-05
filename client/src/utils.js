@@ -88,6 +88,14 @@ export const SERVE_CUSTOMER = gql`
   ${CUSTOMER_FRAGMENT}
 `;
 
+export const MEMBER_FRAGMENT = gql`
+  fragment MemberFragment on User {
+    ...UserFragment
+    isAdmin
+  }
+  ${USER_FRAGMENT}
+`;
+
 export const LIST_MEMBERS = gql`
   query ListMembers($organizationId: ID!) {
     me {
@@ -98,9 +106,9 @@ export const LIST_MEMBERS = gql`
       name
       isAdmin
       members {
-        ...UserFragment
+        ...MemberFragment
       }
     }
   }
-  ${USER_FRAGMENT}
+  ${MEMBER_FRAGMENT}
 `;

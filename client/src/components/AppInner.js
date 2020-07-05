@@ -35,7 +35,7 @@ export default function AppInner() {
         <title>Organizations</title>
       </Helmet>
       <Header>
-        <Heading mr="auto" fontSize="2xl" fontWeight="medium">
+        <Heading mr="auto" fontSize="2xl">
           Organizations
         </Heading>
         <UserMenu user={data.me} />

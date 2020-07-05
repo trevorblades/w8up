@@ -54,9 +54,7 @@ export default function SettingsInner({organizationId}) {
       </Helmet>
       <Header>
         <Box mr="auto">
-          <Heading fontSize="xl" fontWeight="medium">
-            Organization settings
-          </Heading>
+          <Heading fontSize="xl">Organization settings</Heading>
           <Text color="gray.500" fontSize="sm" lineHeight="normal">
             {data.organization.name}
           </Text>

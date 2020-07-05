@@ -66,6 +66,7 @@ export const typeDefs = gql`
     username: String!
     password: String!
     organizationId: ID!
+    isAdmin: Boolean!
   }
 
   type Customer {
@@ -111,6 +112,7 @@ export const typeDefs = gql`
     id: ID!
     name: String!
     email: String!
+    isAdmin: Boolean
     defaultSource: Source
     nowServing: Customer
   }
@@ -358,21 +360,35 @@ export const resolvers = {
 
       // TODO: consolidate/break apart email and username (make decision)
 
+      const existing = await db('users').where(
+        'email',
+        'ilike',
+        input.username
+      );
+
+      if (existing.length) {
+        throw new UserInputError('Username is already in use');
+      }
+
       const salt = bcrypt.genSaltSync(10);
       const [member] = await db('users')
         .insert({
-          name: input.name,
           email: input.username,
+          name: input.name,
           password: bcrypt.hashSync(input.password, salt)
         })
         .returning('*');
 
       await db('members').insert({
         userId: member.id,
-        organizationId: input.organizationId
+        organizationId: input.organizationId,
+        admin: input.isAdmin
       });
 
-      return member;
+      return {
+        ...member,
+        isAdmin: input.isAdmin
+      };
     }
   },
   Customer: {
@@ -413,6 +429,7 @@ export const resolvers = {
     },
     members: (organization, args, {db}) =>
       db('users')
+        .select('users.*', {isAdmin: 'members.admin'})
         .join('members', 'users.id', '=', 'members.userId')
         .where('members.organizationId', organization.id)
   },

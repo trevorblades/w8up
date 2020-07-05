@@ -2,7 +2,9 @@ import PropTypes from 'prop-types';
 import React, {useState} from 'react';
 import {
   Button,
+  Checkbox,
   FormControl,
+  FormHelperText,
   FormLabel,
   IconButton,
   Input,
@@ -14,21 +16,21 @@ import {
   Text
 } from '@chakra-ui/core';
 import {FaEye, FaEyeSlash} from 'react-icons/fa';
-import {LIST_MEMBERS, USER_FRAGMENT} from '../utils';
+import {LIST_MEMBERS, MEMBER_FRAGMENT} from '../utils';
 import {generate} from 'generate-password';
 import {gql, useMutation} from '@apollo/client';
 
 const CREATE_MEMBER = gql`
   mutation CreateMember($input: CreateMemberInput!) {
     createMember(input: $input) {
-      ...UserFragment
+      ...MemberFragment
     }
   }
-  ${USER_FRAGMENT}
+  ${MEMBER_FRAGMENT}
 `;
 
 export default function CreateMemberForm({onCompleted, organizationId}) {
-  const [passwordShown, setPasswordShown] = useState(false);
+  const [passwordShown, setPasswordShown] = useState(true);
   const [createMember, {loading, error}] = useMutation(CREATE_MEMBER, {
     onCompleted,
     update(cache, {data}) {
@@ -56,14 +58,15 @@ export default function CreateMemberForm({onCompleted, organizationId}) {
   function handleSubmit(event) {
     event.preventDefault();
 
-    const {name, username, password} = event.target;
+    const {name, username, password, admin} = event.target;
     createMember({
       variables: {
         input: {
           name: name.value,
-          username: username.value,
+          username: username.value.trim(),
           password: password.value,
-          organizationId
+          organizationId,
+          isAdmin: admin.checked
         }
       }
     });
@@ -73,14 +76,23 @@ export default function CreateMemberForm({onCompleted, organizationId}) {
     <form onSubmit={handleSubmit}>
       <ModalBody as={Stack} spacing="4">
         {error && <Text color="red.500">{error.message}</Text>}
-        <Input required placeholder="Name" name="name" />
-        <Input required placeholder="Username" name="username" />
+        <FormControl>
+          <FormLabel>Full name</FormLabel>
+          <Input required placeholder="John Appleseed" name="name" />
+        </FormControl>
+        <FormControl>
+          <FormLabel>Username</FormLabel>
+          <Input required placeholder="Must be unique" name="username" />
+        </FormControl>
         <FormControl>
           <FormLabel>Password</FormLabel>
           <InputGroup>
             <Input
               required
-              defaultValue={generate({numbers: true})}
+              defaultValue={generate({
+                length: 10,
+                numbers: true
+              })}
               name="password"
               type={passwordShown ? 'text' : 'password'}
             />
@@ -96,6 +108,13 @@ export default function CreateMemberForm({onCompleted, organizationId}) {
               />
             </InputRightElement>
           </InputGroup>
+          <FormHelperText>Copy this down somewhere</FormHelperText>
+        </FormControl>
+        <FormControl>
+          <Checkbox name="admin">Give admin privileges</Checkbox>
+          <FormHelperText>
+            Admins can edit organization settings and add/remove members
+          </FormHelperText>
         </FormControl>
       </ModalBody>
       <ModalFooter>

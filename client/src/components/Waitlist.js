@@ -158,7 +158,7 @@ export default function Waitlist({
         <Flex maxW="container.lg" mx="auto" px={[4, 5]} py="3" align="center">
           {nowServing && (
             <Box mr="4" overflow="hidden">
-              <Text color="gray.500" fontWeight="medium" fontSize="sm">
+              <Text color="gray.500" fontSize="sm">
                 Now serving
               </Text>
               <Text fontWeight="medium" isTruncated>
