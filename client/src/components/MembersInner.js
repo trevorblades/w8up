@@ -2,6 +2,7 @@ import CreateMemberButton from './CreateMemberButton';
 import Header from './Header';
 import PropTypes from 'prop-types';
 import React from 'react';
+import RemoveMemberButton from './RemoveMemberButton';
 import TabMenu from './TabMenu';
 import UserMenu from './UserMenu';
 import {
@@ -9,14 +10,12 @@ import {
   Box,
   Flex,
   Heading,
-  IconButton,
   List,
   ListItem,
   Spinner,
   Stack,
   Text
 } from '@chakra-ui/core';
-import {FaTimes} from 'react-icons/fa';
 import {Helmet} from 'react-helmet';
 import {LIST_MEMBERS} from '../utils';
 import {useQuery} from '@apollo/client';
@@ -72,11 +71,9 @@ export default function MembersInner({organizationId}) {
               <Avatar mr="3" fontSize="md" name={member.name} size="sm" />
               {member.name} &lt;{member.email}&gt;
               {!member.isAdmin && (
-                <IconButton
-                  variant="ghost"
-                  ml="auto"
-                  size="sm"
-                  icon={<FaTimes />}
+                <RemoveMemberButton
+                  member={member}
+                  organizationId={organizationId}
                 />
               )}
             </ListItem>

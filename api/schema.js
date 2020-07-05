@@ -26,6 +26,7 @@ export const typeDefs = gql`
     createOrganization(input: CreateOrganizationInput!): Organization!
     updateOrganization(input: UpdateOrganizationInput!): Organization!
     createMember(input: CreateMemberInput!): User!
+    removeMember(input: RemoveMemberInput!): User!
   }
 
   type Subscription {
@@ -67,6 +68,11 @@ export const typeDefs = gql`
     password: String!
     organizationId: ID!
     isAdmin: Boolean!
+  }
+
+  input RemoveMemberInput {
+    userId: ID!
+    organizationId: ID!
   }
 
   type Customer {
@@ -360,13 +366,11 @@ export const resolvers = {
 
       // TODO: consolidate/break apart email and username (make decision)
 
-      const existing = await db('users').where(
-        'email',
-        'ilike',
-        input.username
-      );
+      const existing = await db('users')
+        .where('email', 'ilike', input.username)
+        .first();
 
-      if (existing.length) {
+      if (existing) {
         throw new UserInputError('Username is already in use');
       }
 
@@ -389,6 +393,36 @@ export const resolvers = {
         ...member,
         isAdmin: input.isAdmin
       };
+    },
+    async removeMember(parent, {input}, {db, user}) {
+      const organizations = await db('members')
+        .where({
+          userId: user.id,
+          admin: true
+        })
+        .pluck('organizationId');
+
+      if (!organizations.includes(input.organizationId)) {
+        throw new ForbiddenError('You do not have access to this organization');
+      }
+
+      const member = await db('users')
+        .join('members', 'users.id', '=', 'members.userId')
+        .where({
+          id: input.userId,
+          'members.organizationId': input.organizationId
+        })
+        .first();
+
+      if (!member) {
+        throw new UserInputError('User is not a member of this organization');
+      }
+
+      await db('members')
+        .where(input)
+        .del();
+
+      return member;
     }
   },
   Customer: {
