@@ -27,6 +27,10 @@ export default function ChatPreview({organization}) {
       borderRadius="lg"
       boxShadow="lg"
       overflow="hidden"
+      display={{
+        base: 'none',
+        md: 'block'
+      }}
       position="sticky"
       top="20"
     >

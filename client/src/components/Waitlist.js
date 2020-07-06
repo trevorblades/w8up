@@ -4,10 +4,12 @@ import React, {useCallback} from 'react';
 import RemoveButton from './RemoveButton';
 import ServeButton from './ServeButton';
 import Timer from './Timer';
+import empty from '../assets/empty.svg';
 import useEffectOnce from 'react-use/lib/useEffectOnce';
 import {
   Box,
   Flex,
+  Heading,
   List,
   ListItem,
   Stack,
@@ -112,49 +114,59 @@ export default function Waitlist({
 
   return (
     <>
-      <List
-        as={Stack}
-        divider={<StackDivider />}
-        maxW="container.lg"
-        mx="auto"
-        w="full"
-        px={{lg: 5}}
-      >
-        {customers.map((customer, index) => (
-          <ListItem
-            key={customer.id}
-            py={[3, 4]}
-            px={{
-              base: 4,
-              sm: 5,
-              lg: 0
-            }}
-          >
-            <Text fontSize="xl" fontWeight="medium">
-              {index + 1}. {customer.phone}
-            </Text>
-            <Text>{customer.name}</Text>
-            {customer.messages.map(message => (
-              <Text key={message.id}>{message.text}</Text>
-            ))}
-            <Stack align="center" direction="row" spacing="2" mt="3">
-              <ServeButton
-                mutationOptions={{
-                  update,
-                  variables: {
-                    id: customer.id
-                  }
-                }}
-              />
-              <RemoveButton customer={customer} />
-              <Text fontSize="sm" color="gray.500">
-                <Timer date={new Date(customer.waitingSince)} />
+      {customers.length ? (
+        <List
+          as={Stack}
+          divider={<StackDivider />}
+          maxW="container.lg"
+          mx="auto"
+          mb="auto"
+          w="full"
+          px={{lg: 5}}
+        >
+          {customers.map((customer, index) => (
+            <ListItem
+              key={customer.id}
+              py={[3, 4]}
+              px={{
+                base: 4,
+                sm: 5,
+                lg: 0
+              }}
+            >
+              <Text fontSize="xl" fontWeight="medium">
+                {index + 1}. {customer.phone}
               </Text>
-            </Stack>
-          </ListItem>
-        ))}
-      </List>
-      <Box bg="gray.900" color="white" mt="auto" position="sticky" bottom="0">
+              <Text>{customer.name}</Text>
+              {customer.messages.map(message => (
+                <Text key={message.id}>{message.text}</Text>
+              ))}
+              <Stack align="center" direction="row" spacing="2" mt="3">
+                <ServeButton
+                  mutationOptions={{
+                    update,
+                    variables: {
+                      id: customer.id
+                    }
+                  }}
+                />
+                <RemoveButton customer={customer} />
+                <Text fontSize="sm" color="gray.500">
+                  <Timer date={new Date(customer.waitingSince)} />
+                </Text>
+              </Stack>
+            </ListItem>
+          ))}
+        </List>
+      ) : (
+        <Box m="auto">
+          <Box mb="2" as="img" h="200px" src={empty} />
+          <Heading textAlign="center" fontSize="2xl">
+            Your list is clear
+          </Heading>
+        </Box>
+      )}
+      <Box bg="gray.900" color="white" position="sticky" bottom="0">
         <Flex maxW="container.lg" mx="auto" px={[4, 5]} py="3" align="center">
           {nowServing && (
             <Box mr="4" overflow="hidden">

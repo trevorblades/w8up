@@ -182,7 +182,14 @@ export default function OrgSettingsForm(props) {
               </FormControl>
             </Grid>
           </Stack>
-          <Grid alignItems="flex-start" gap="4" templateColumns="2fr 1fr">
+          <Grid
+            alignItems="flex-start"
+            gap="4"
+            templateColumns={{
+              md: 'repeat(2, 1fr)',
+              lg: '2fr 1fr'
+            }}
+          >
             <Stack spacing="4">
               <FormControl>
                 <FormLabel>Welcome message template</FormLabel>

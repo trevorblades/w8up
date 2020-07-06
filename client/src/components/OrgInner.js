@@ -42,7 +42,7 @@ export default function OrgInner({organizationId}) {
             {data.organization.phone}
           </Text>
         </Box>
-        <Flex mr="6" align="center">
+        <Flex mr={[4, 5]} align="center">
           <Text mr="2">{data.organization.accepting ? 'On' : 'Off'}</Text>
           <AcceptingSwitch
             organization={data.organization}
