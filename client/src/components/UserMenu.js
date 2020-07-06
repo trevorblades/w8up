@@ -25,7 +25,7 @@ export default function UserMenu(props) {
           <Avatar mr="2" size="sm" fontSize="md" name={props.user.name} />
           <FaCaretDown />
         </MenuButton>
-        <MenuList boxShadow="lg" pt="0" placement="bottom-end">
+        <MenuList boxShadow="lg" pt="0">
           <Stack p="4" spacing="2" bg="gray.50" align="center">
             <Avatar name={props.user.name} />
             <Box textAlign="center">

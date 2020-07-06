@@ -1,23 +1,21 @@
+import PasswordInput from './PasswordInput';
 import PropTypes from 'prop-types';
 import React, {useState} from 'react';
 import {
   Button,
   Checkbox,
+  Flex,
   FormControl,
   FormHelperText,
   FormLabel,
-  IconButton,
   Input,
-  InputGroup,
-  InputRightElement,
   ModalBody,
   ModalFooter,
   Stack,
+  Switch,
   Text
 } from '@chakra-ui/core';
-import {FaEye, FaEyeSlash} from 'react-icons/fa';
 import {LIST_MEMBERS, MEMBER_FRAGMENT} from '../utils';
-import {generate} from 'generate-password';
 import {gql, useMutation} from '@apollo/client';
 
 const CREATE_MEMBER = gql`
@@ -30,7 +28,7 @@ const CREATE_MEMBER = gql`
 `;
 
 export default function CreateMemberForm({onCompleted, organizationId}) {
-  const [passwordShown, setPasswordShown] = useState(true);
+  const [createNew, setCreateNew] = useState(false);
   const [createMember, {loading, error}] = useMutation(CREATE_MEMBER, {
     onCompleted,
     update(cache, {data}) {
@@ -62,9 +60,9 @@ export default function CreateMemberForm({onCompleted, organizationId}) {
     createMember({
       variables: {
         input: {
-          name: name.value,
+          name: name?.value,
           username: username.value.trim(),
-          password: password.value,
+          password: password?.value,
           organizationId,
           isAdmin: admin.checked
         }
@@ -73,43 +71,32 @@ export default function CreateMemberForm({onCompleted, organizationId}) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} autoComplete="off">
       <ModalBody as={Stack} spacing="4">
         {error && <Text color="red.500">{error.message}</Text>}
-        <FormControl>
-          <FormLabel>Full name</FormLabel>
-          <Input required placeholder="John Appleseed" name="name" />
-        </FormControl>
-        <FormControl>
-          <FormLabel>Username</FormLabel>
-          <Input required placeholder="Must be unique" name="username" />
-        </FormControl>
-        <FormControl>
-          <FormLabel>Password</FormLabel>
-          <InputGroup>
-            <Input
-              required
-              defaultValue={generate({
-                length: 10,
-                numbers: true
-              })}
-              name="password"
-              type={passwordShown ? 'text' : 'password'}
-            />
-            <InputRightElement>
-              <IconButton
-                size="sm"
-                variant="ghost"
-                fontSize="lg"
-                onClick={() =>
-                  setPasswordShown(prevPasswordShown => !prevPasswordShown)
-                }
-                icon={passwordShown ? <FaEyeSlash /> : <FaEye />}
-              />
-            </InputRightElement>
-          </InputGroup>
-          <FormHelperText>Copy this down somewhere</FormHelperText>
-        </FormControl>
+        <Flex align="center">
+          <Text mr="3">Create new user?</Text>
+          <Switch
+            display="flex"
+            isChecked={createNew}
+            onChange={event => setCreateNew(event.target.checked)}
+          />
+        </Flex>
+        {createNew ? (
+          <>
+            <FormControl>
+              <FormLabel>Full name</FormLabel>
+              <Input required placeholder="John Appleseed" name="name" />
+            </FormControl>
+            <FormControl>
+              <FormLabel>Username</FormLabel>
+              <Input required placeholder="Make it unique" name="username" />
+            </FormControl>
+            <PasswordInput />
+          </>
+        ) : (
+          <Input required size="lg" placeholder="Username" name="username" />
+        )}
         <FormControl>
           <Checkbox name="admin">Give admin privileges</Checkbox>
           <FormHelperText>

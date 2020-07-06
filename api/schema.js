@@ -63,9 +63,9 @@ export const typeDefs = gql`
   }
 
   input CreateMemberInput {
-    name: String!
     username: String!
-    password: String!
+    name: String
+    password: String
     organizationId: ID!
     isAdmin: Boolean!
   }
@@ -364,24 +364,36 @@ export const resolvers = {
         throw new ForbiddenError('You do not have access to this organization');
       }
 
-      // TODO: consolidate/break apart email and username (make decision)
-
-      const existing = await db('users')
+      let member = await db('users')
         .where('email', 'ilike', input.username)
         .first();
 
-      if (existing) {
-        throw new UserInputError('Username is already in use');
-      }
+      // heuristic to know that we're creating a new user
+      if ('name' in input && 'password' in input) {
+        if (member) {
+          throw new UserInputError('Username is already in use');
+        }
 
-      const salt = bcrypt.genSaltSync(10);
-      const [member] = await db('users')
-        .insert({
-          email: input.username,
-          name: input.name,
-          password: bcrypt.hashSync(input.password, salt)
-        })
-        .returning('*');
+        const salt = bcrypt.genSaltSync(10);
+        const [userCreated] = await db('users')
+          .insert({
+            email: input.username,
+            name: input.name,
+            password: bcrypt.hashSync(input.password, salt)
+          })
+          .returning('*');
+
+        member = userCreated;
+      } else if (!member) {
+        throw new UserInputError('User does not exist');
+      } else {
+        const organizations = await db('members')
+          .where('userId', member.id)
+          .pluck('organizationId');
+        if (organizations.includes(input.organizationId)) {
+          throw new UserInputError('User is already in this organization');
+        }
+      }
 
       await db('members').insert({
         userId: member.id,

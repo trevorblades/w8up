@@ -42,7 +42,7 @@ export default function LoginForm(props) {
         p="10"
         maxW={{md: 400}}
       >
-        <Box as={Logo} h="12" mb="8" mx="auto" />
+        <Box as={Logo} h="12" mb="8" mx="auto" fill="current" />
         <Stack spacing="4">
           {error && <Text color="red.500">{error}</Text>}
           <Input
