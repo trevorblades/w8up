@@ -1,9 +1,9 @@
-import CreateOrgForm from './CreateOrgForm';
+import CreateOrganizationForm from './CreateOrganizationForm';
 import Header from './Header';
 import OrganizationList from './OrganizationList';
 import React from 'react';
 import UserMenu from './UserMenu';
-import {Box, Heading, Spinner, Text} from '@chakra-ui/core';
+import {Box, Button, Heading, Spinner, Text} from '@chakra-ui/core';
 import {Elements} from '@stripe/react-stripe-js';
 import {Helmet} from 'react-helmet';
 import {LIST_ORGANIZATIONS} from '../utils';
@@ -29,23 +29,41 @@ export default function Organizations() {
 
   return (
     <>
-      <Helmet>
-        <title>Organizations</title>
-      </Helmet>
       <Header>
         <Heading mr="auto" fontSize="2xl">
           Organizations
         </Heading>
         <UserMenu user={data.me} />
       </Header>
-      <Box w="full" maxW="container.md" m="auto" p="8">
+      <Box w="full" maxW="container.md" m="auto" p={[4, 5]}>
         <Elements stripe={stripePromise}>
           {data.organizations.length ? (
-            <OrganizationList data={data} subscribeToMore={subscribeToMore} />
+            <>
+              <Helmet>
+                <title>Organizations</title>
+              </Helmet>
+              <OrganizationList data={data} subscribeToMore={subscribeToMore} />
+            </>
           ) : (
             <>
-              <Heading fontSize="3xl">Create an organization</Heading>
-              <CreateOrgForm defaultSource={data.me.defaultSource} />
+              <Helmet>
+                <title>New organization</title>
+              </Helmet>
+              <Heading mb="4" fontSize="3xl">
+                New organization
+              </Heading>
+              <CreateOrganizationForm
+                defaultSource={data.me.defaultSource}
+                renderButton={buttonProps => (
+                  <Button
+                    {...buttonProps}
+                    colorScheme="green"
+                    size="lg"
+                    mt="6"
+                    isFullWidth
+                  />
+                )}
+              />
             </>
           )}
         </Elements>

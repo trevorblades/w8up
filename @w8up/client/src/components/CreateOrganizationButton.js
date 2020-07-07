@@ -1,9 +1,8 @@
-import CreateOrgForm from './CreateOrgForm';
+import CreateOrganizationForm from './CreateOrganizationForm';
 import React from 'react';
 import {
   Button,
   Modal,
-  ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalFooter,
@@ -24,10 +23,14 @@ export default function CreateOrgButton(props) {
           <ModalContent>
             <ModalHeader>New organization</ModalHeader>
             <ModalCloseButton />
-            <CreateOrgForm
+            <CreateOrganizationForm
               {...props}
-              BodyWrapper={ModalBody}
-              ButtonWrapper={ModalFooter}
+              wrapBody
+              renderButton={buttonProps => (
+                <ModalFooter>
+                  <Button {...buttonProps} />
+                </ModalFooter>
+              )}
             />
           </ModalContent>
         </ModalOverlay>

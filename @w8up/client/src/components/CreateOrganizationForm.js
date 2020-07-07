@@ -4,13 +4,11 @@ import PropTypes from 'prop-types';
 import React, {Fragment, useState} from 'react';
 import {
   Box,
-  Button,
   Flex,
   FormControl,
   FormLabel,
   Input,
   ModalBody,
-  ModalFooter,
   Radio,
   RadioGroup,
   Stack,
@@ -31,18 +29,14 @@ const CREATE_ORGANIZATION = gql`
   ${ORGANIZATION_FRAGMENT}
 `;
 
-export default function CreateOrgForm({
-  defaultSource,
-  ButtonWrapper,
-  BodyWrapper
-}) {
+export default function CreateOrganizationForm(props) {
   const stripe = useStripe();
   const elements = useElements();
   const {fonts, colors} = useTheme();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [phoneNumbersLoaded, setPhoneNumbersLoaded] = useState(false);
-  const [newCard, setNewCard] = useState(!defaultSource);
+  const [newCard, setNewCard] = useState(!props.defaultSource);
 
   const [createOrganization] = useMutation(CREATE_ORGANIZATION, {
     update(cache, result) {
@@ -78,7 +72,7 @@ export default function CreateOrgForm({
     setLoading(true);
 
     try {
-      const {name, phone, plan} = event.target;
+      const {name, 'radio-phone': phone, 'radio-plan': plan} = event.target;
       const input = {
         name: name.value,
         phone: phone.value,
@@ -105,10 +99,12 @@ export default function CreateOrgForm({
 
   return (
     <form onSubmit={handleSubmit}>
-      <BodyWrapper>
+      {React.createElement(
+        props.wrapBody ? ModalBody : Fragment,
+        undefined,
         <Stack spacing="4">
           {error && <Text color="red.500">{error.message}</Text>}
-          <Input name="name" placeholder="Organization name" isRequired />
+          <Input name="name" placeholder="Organization name" required />
           <FormControl>
             <FormLabel>Select a phone number</FormLabel>
             <PhoneNumbers
@@ -128,7 +124,7 @@ export default function CreateOrgForm({
               </Stack>
             </RadioGroup>
           </FormControl>
-          {defaultSource && (
+          {props.defaultSource && (
             <FormControl>
               <FormLabel>Payment method</FormLabel>
               <RadioGroup
@@ -138,13 +134,17 @@ export default function CreateOrgForm({
                 <Stack>
                   <Radio value="false">
                     <Flex align="center">
-                      <CardImage h="6" mr="2" brand={defaultSource.brand} />
+                      <CardImage
+                        h="6"
+                        mr="2"
+                        brand={props.defaultSource.brand}
+                      />
                       <Text
                         fontFamily="mono"
                         textTransform="uppercase"
                         letterSpacing="wider"
                       >
-                        xxxx xxxx xxxx {defaultSource.last4}
+                        xxxx xxxx xxxx {props.defaultSource.last4}
                       </Text>
                     </Flex>
                   </Radio>
@@ -173,27 +173,19 @@ export default function CreateOrgForm({
             </Box>
           )}
         </Stack>
-      </BodyWrapper>
-      <ButtonWrapper>
-        <Button
-          isDisabled={!stripe || !phoneNumbersLoaded}
-          isLoading={loading}
-          type="submit"
-        >
-          Create organization
-        </Button>
-      </ButtonWrapper>
+      )}
+      {props.renderButton({
+        isDisabled: !stripe || !phoneNumbersLoaded,
+        isLoading: loading,
+        type: 'submit',
+        children: 'Create organization'
+      })}
     </form>
   );
 }
 
-CreateOrgForm.propTypes = {
+CreateOrganizationForm.propTypes = {
   defaultSource: PropTypes.object,
-  ButtonWrapper: PropTypes.oneOf([Fragment, ModalFooter]),
-  BodyWrapper: PropTypes.oneOf([Fragment, ModalBody])
-};
-
-CreateOrgForm.defaultProps = {
-  BodyWrapper: Fragment,
-  ButtonWrapper: Fragment
+  renderButton: PropTypes.func.isRequired,
+  wrapBody: PropTypes.bool
 };

@@ -3,11 +3,15 @@ import Layout from '../components/Layout';
 import React from 'react';
 import {Box, Button, Flex, Heading, Stack, Text} from '@chakra-ui/core';
 import {Link as GatsbyLink} from 'gatsby';
+import {Helmet} from 'react-helmet';
 import {ReactComponent as Logo} from '../assets/logo.svg';
 
 export default function Home() {
   return (
     <Layout>
+      <Helmet>
+        <title>Low tech, SMS-based waitlist</title>
+      </Helmet>
       <Flex minH="100vh">
         <Box
           w="full"
@@ -27,8 +31,12 @@ export default function Home() {
             <div>
               <Flex mb="2" align="center">
                 <Box as={Logo} h="10" mr="3" />
-                <Heading fontSize="4xl" fontWeight="semibold">
-                  w8up
+                <Heading
+                  fontSize="2xl"
+                  fontWeight="semibold"
+                  letterSpacing="wider"
+                >
+                  W8UP
                 </Heading>
               </Flex>
               <Heading fontSize="6xl" lineHeight="normal" fontWeight="light">

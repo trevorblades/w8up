@@ -1,4 +1,4 @@
-import CreateOrgButton from './CreateOrgButton';
+import CreateOrganizationButton from './CreateOrganizationButton';
 import PropTypes from 'prop-types';
 import React from 'react';
 import useEffectOnce from 'react-use/lib/useEffectOnce';
@@ -43,7 +43,7 @@ export default function OrganizationList({data, subscribeToMore}) {
           </Flex>
         ))}
       </Stack>
-      <CreateOrgButton defaultSource={data.me.defaultSource} />
+      <CreateOrganizationButton defaultSource={data.me.defaultSource} />
     </>
   );
 }
