@@ -1,6 +1,16 @@
+require('dotenv').config();
+
 module.exports = {
   plugins: [
     'gatsby-plugin-react-helmet',
+    'gatsby-theme-apollo',
+    'gatsby-plugin-svgr',
+    {
+      resolve: 'gatsby-plugin-manifest',
+      options: {
+        icon: 'src/assets/icon.svg'
+      }
+    },
     {
       resolve: 'gatsby-plugin-chakra-ui',
       options: {
@@ -8,15 +18,16 @@ module.exports = {
       }
     },
     {
-      resolve: 'gatsby-source-instagram',
+      resolve: 'gatsby-source-stripe',
       options: {
-        username: 'sorrentobarbers'
+        objects: ['Plan'],
+        secretKey: process.env.STRIPE_SECRET_KEY
       }
     },
     {
-      resolve: 'gatsby-plugin-manifest',
+      resolve: 'gatsby-plugin-create-client-paths',
       options: {
-        icon: 'src/assets/icon.svg'
+        prefixes: ['/app/*']
       }
     }
   ]

@@ -1,84 +1,61 @@
+import ChatBubble from '../components/ChatBubble';
+import Layout from '../components/Layout';
 import React from 'react';
-import logo from '../assets/logo.svg';
-import {Box, Flex, Heading, Text} from '@chakra-ui/core';
-import {Helmet} from 'react-helmet';
-// import {graphql, useStaticQuery} from 'gatsby';
-
-function HomePageHeading(props) {
-  return (
-    <Heading as="h3" fontSize="5xl" textTransform="uppercase" {...props} />
-  );
-}
+import {Box, Button, Flex, Heading, Stack, Text} from '@chakra-ui/core';
+import {Link as GatsbyLink} from 'gatsby';
+import {ReactComponent as Logo} from '../assets/logo.svg';
 
 export default function Home() {
-  // FIXME: uncomment when issue below is addressed
-  // https://github.com/oorestisime/gatsby-source-instagram/issues/24
-  // const {allInstaNode} = useStaticQuery(
-  //   graphql`
-  //     {
-  //       allInstaNode(sort: {order: DESC, fields: timestamp}) {
-  //         nodes {
-  //           original
-  //           id
-  //           timestamp
-  //         }
-  //       }
-  //     }
-  //   `
-  // );
-
   return (
-    <>
-      <Helmet>
-        <title>Sorrento Barbers</title>
-      </Helmet>
-      <Flex
-        direction="column"
-        justify="flex-end"
-        color="white"
-        bg="red.500"
-        px="20"
-      >
-        <Box mt="200px" mb="16" maxW="599px" as="img" src={logo} />
-        <HomePageHeading mb="8">2417 E Hastings St, Vancouver</HomePageHeading>
-        <HomePageHeading>
-          Tuesday: 8 AM - 1 PM
-          <br />
-          Wednesday - Saturday: 8 AM - 6 PM
-          <br />
-          Sunday: 10 AM - 3 PM
-        </HomePageHeading>
-      </Flex>
-      <Box px="20" mb="120px">
-        <HomePageHeading mb="8">Monday: Closed</HomePageHeading>
-        <HomePageHeading>
-          Join the waitlist
-          <br />
-          Text your name to (604) 330-8137
-        </HomePageHeading>
-      </Box>
-      {/* <Flex h="500px" overflow="hidden" bg="black">
-        {allInstaNode.nodes.map(instaNode => (
-          <PseudoBox
-            as="a"
-            h="full"
-            flexShrink="0"
-            key={instaNode.id}
-            href={`https://instagram.com/p/${instaNode.id}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            _hover={{opacity: 0.9}}
-            _active={{opacity: 0.8}}
+    <Layout>
+      <Flex minH="100vh">
+        <Box
+          w="full"
+          p={{
+            base: 8,
+            md: 10
+          }}
+          my="auto"
+        >
+          <Stack
+            spacing="10"
+            w={{
+              base: 'full',
+              lg: 2 / 3
+            }}
           >
-            <Box as="img" h="full" loading="lazy" src={instaNode.original} />
-          </PseudoBox>
-        ))}
-      </Flex> */}
-      <Box p="20" textAlign="center">
-        <Text fontSize="2xl">
-          &copy; {new Date().getFullYear()} Sorrento Barbers
-        </Text>
-      </Box>
-    </>
+            <div>
+              <Flex mb="2" align="center">
+                <Box as={Logo} h="10" mr="3" />
+                <Heading fontSize="4xl" fontWeight="semibold">
+                  Saucer
+                </Heading>
+              </Flex>
+              <Heading fontSize="6xl" lineHeight="normal" fontWeight="light">
+                Low tech, SMS-based waitlist
+              </Heading>
+            </div>
+            <Stack maxW="300px" spacing="3">
+              <ChatBubble>Stan Marsh</ChatBubble>
+              <ChatBubble fromThem>
+                You&apos;re on the list! Your estimated wait time is 24 minutes.
+              </ChatBubble>
+            </Stack>
+            <Flex align="center">
+              <Button
+                mr="3"
+                as={GatsbyLink}
+                to="/app"
+                size="lg"
+                colorScheme="green"
+              >
+                Log in
+              </Button>
+              <Text fontSize="lg">This software is in beta</Text>
+            </Flex>
+          </Stack>
+        </Box>
+      </Flex>
+    </Layout>
   );
 }

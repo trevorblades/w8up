@@ -1,12 +1,12 @@
-import {theme} from '@chakra-ui/core';
+import merge from 'lodash.merge';
+import theme from '@chakra-ui/theme';
 
-const body = "'Helvetica Neue', Helvetica, sans-serif";
-
-export default {
-  ...theme,
-  fonts: {
-    body,
-    heading: body,
-    mono: 'monospace'
+export default merge(theme, {
+  components: {
+    Heading: {
+      baseStyle: {
+        fontWeight: 'medium'
+      }
+    }
   }
-};
+});
