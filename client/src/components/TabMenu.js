@@ -3,20 +3,16 @@ import React from 'react';
 import {Flex, Tab, TabList, Tabs} from '@chakra-ui/core';
 import {Link as GatsbyLink} from 'gatsby';
 
-export default function TabMenu({organization, ...props}) {
+export default function TabMenu({tabs, pathname}) {
   return (
-    <Tabs {...props} bg="gray.50" pt="1">
+    <Tabs index={Object.values(tabs).indexOf(pathname)} bg="gray.50" pt="1">
       <TabList>
         <Flex px={[0, 1]} w="full" maxW="container.lg" mx="auto">
-          <Tab as={GatsbyLink} to={`/app/list/${organization.id}`}>
-            Waitlist
-          </Tab>
-          <Tab as={GatsbyLink} to={`/app/settings/${organization.id}`}>
-            Settings
-          </Tab>
-          <Tab as={GatsbyLink} to={`/app/members/${organization.id}`}>
-            Members
-          </Tab>
+          {Object.entries(tabs).map(([key, value]) => (
+            <Tab key={key} as={GatsbyLink} to={value}>
+              {key}
+            </Tab>
+          ))}
         </Flex>
       </TabList>
     </Tabs>
@@ -24,5 +20,6 @@ export default function TabMenu({organization, ...props}) {
 }
 
 TabMenu.propTypes = {
-  organization: PropTypes.object.isRequired
+  tabs: PropTypes.object.isRequired,
+  pathname: PropTypes.string.isRequired
 };

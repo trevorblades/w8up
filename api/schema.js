@@ -109,7 +109,7 @@ export const typeDefs = gql`
     removedMessage: String!
     notRemovedMessage: String!
     limitExceededMessage: String!
-    isAdmin: Boolean!
+    isOwn: Boolean!
     customers(served: Boolean!): [Customer!]!
     members: [User!]!
   }
@@ -464,14 +464,14 @@ export const resolvers = {
         ? query.whereRaw('"servedAt" > now() - interval \'7 days\'')
         : query;
     },
-    async isAdmin(organization, args, {db, user}) {
-      const [admin] = await db('members')
+    async isOwn(organization, args, {db, user}) {
+      const [own] = await db('members')
         .where({
           userId: user.id,
           organizationId: organization.id
         })
         .pluck('admin');
-      return admin;
+      return own;
     },
     members: (organization, args, {db}) =>
       db('users')

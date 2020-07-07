@@ -11,8 +11,7 @@ import {
   Stack,
   Text
 } from '@chakra-ui/core';
-import {FaArrowLeft, FaCaretDown, FaSignOutAlt} from 'react-icons/fa';
-import {Link as GatsbyLink} from 'gatsby';
+import {FaCaretDown, FaSignOutAlt} from 'react-icons/fa';
 import {LogOutContext} from '../utils';
 
 export default function UserMenu(props) {
@@ -36,12 +35,7 @@ export default function UserMenu(props) {
             </Box>
           </Stack>
           <MenuDivider mt="0" />
-          {props.isViewingOrg && (
-            <MenuItem as={GatsbyLink} to="/app">
-              <Box as={FaArrowLeft} mr="2" />
-              Change organization
-            </MenuItem>
-          )}
+          {props.children}
           <MenuItem onClick={logOut}>
             <Box as={FaSignOutAlt} mr="2" />
             Log out
@@ -57,5 +51,5 @@ export default function UserMenu(props) {
 
 UserMenu.propTypes = {
   user: PropTypes.object.isRequired,
-  isViewingOrg: PropTypes.bool
+  children: PropTypes.node
 };

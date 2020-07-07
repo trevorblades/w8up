@@ -14,7 +14,7 @@ import {useQuery} from '@apollo/client';
 
 const stripePromise = loadStripe(process.env.GATSBY_STRIPE_PUBLISHABLE_KEY);
 
-export default function AppInner() {
+export default function Organizations() {
   const {data, loading, error} = useQuery(LIST_ORGANIZATIONS);
 
   if (loading) {
@@ -53,7 +53,7 @@ export default function AppInner() {
                     p="3"
                     borderWidth="1px"
                     as={GatsbyLink}
-                    to={`/app/list/${organization.id}`}
+                    to={`/app/${organization.id}`}
                     key={organization.id}
                     _hover={{bg: 'gray.50'}}
                     _active={{bg: 'gray.100'}}

@@ -26,10 +26,12 @@ import {
 } from '@chakra-ui/core';
 import {gql, useMutation} from '@apollo/client';
 
-export const DETAILS_FRAGMENT = gql`
-  fragment DetailsFragment on Organization {
+export const SETTINGS_FRAGMENT = gql`
+  fragment SettingsFragment on Organization {
     id
     name
+    phone
+    isOwn
     queueLimit
     averageHandleTime
     activeAgents
@@ -49,13 +51,13 @@ export const DETAILS_FRAGMENT = gql`
 const UPDATE_ORGANIZATION = gql`
   mutation UpdateOrganization($input: UpdateOrganizationInput!) {
     updateOrganization(input: $input) {
-      ...DetailsFragment
+      ...SettingsFragment
     }
   }
-  ${DETAILS_FRAGMENT}
+  ${SETTINGS_FRAGMENT}
 `;
 
-export default function OrgSettingsForm(props) {
+export default function SettingsForm(props) {
   const toast = useToast();
   const [organization, setOrganization] = useState(props.organization);
   const [updateOrganization, {loading, error}] = useMutation(
@@ -336,6 +338,6 @@ export default function OrgSettingsForm(props) {
   );
 }
 
-OrgSettingsForm.propTypes = {
+SettingsForm.propTypes = {
   organization: PropTypes.object.isRequired
 };

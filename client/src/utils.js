@@ -58,27 +58,6 @@ export const LIST_ORGANIZATIONS = gql`
   ${ORGANIZATION_FRAGMENT}
 `;
 
-export const WAITLIST_QUERY = gql`
-  query WaitlistQuery($organizationId: ID!) {
-    me {
-      ...UserFragment
-      nowServing {
-        name
-      }
-    }
-    organization(id: $organizationId) {
-      ...OrganizationFragment
-      isAdmin
-      customers(served: false) {
-        ...CustomerFragment
-      }
-    }
-  }
-  ${USER_FRAGMENT}
-  ${ORGANIZATION_FRAGMENT}
-  ${CUSTOMER_FRAGMENT}
-`;
-
 export const SERVE_CUSTOMER = gql`
   mutation ServeCustomer($id: ID!) {
     serveCustomer(id: $id) {
@@ -98,13 +77,9 @@ export const MEMBER_FRAGMENT = gql`
 
 export const LIST_MEMBERS = gql`
   query ListMembers($organizationId: ID!) {
-    me {
-      ...UserFragment
-    }
     organization(id: $organizationId) {
       id
-      name
-      isAdmin
+      isOwn
       members {
         ...MemberFragment
       }
