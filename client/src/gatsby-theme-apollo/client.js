@@ -38,7 +38,7 @@ if (process.browser) {
       );
     },
     new WebSocketLink({
-      uri: 'ws://localhost:4000/graphql',
+      uri: process.env.GATSBY_WS_URL,
       options: {
         reconnect: true,
         connectionParams: () => ({
