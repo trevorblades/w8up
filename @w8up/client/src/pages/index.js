@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <Layout>
       <Helmet>
-        <title>Low tech, SMS-based waitlist</title>
+        <title>SMS-based waitlist</title>
       </Helmet>
       <Box maxW="container.lg" w="full" mx="auto" p={[8, 10, 12]}>
         <Stack spacing="10" align="center">
