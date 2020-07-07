@@ -5,7 +5,7 @@ import {Helmet} from 'react-helmet';
 export default function Layout(props) {
   return (
     <>
-      <Helmet defaultTitle="Saucer" titleTemplate="%s - Saucer" />
+      <Helmet defaultTitle="w8up" titleTemplate="%s - w8up" />
       {props.children}
     </>
   );

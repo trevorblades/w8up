@@ -41,7 +41,7 @@ export default function UserMenu(props) {
             Log out
           </MenuItem>
           <Text mt="4" color="gray.500" textAlign="center" fontSize="sm">
-            &copy; {new Date().getFullYear()} Saucer
+            &copy; {new Date().getFullYear()} w8up
           </Text>
         </MenuList>
       </Menu>

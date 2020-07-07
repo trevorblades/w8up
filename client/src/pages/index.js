@@ -28,7 +28,7 @@ export default function Home() {
               <Flex mb="2" align="center">
                 <Box as={Logo} h="10" mr="3" />
                 <Heading fontSize="4xl" fontWeight="semibold">
-                  Saucer
+                  w8up
                 </Heading>
               </Flex>
               <Heading fontSize="6xl" lineHeight="normal" fontWeight="light">
