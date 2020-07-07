@@ -5,6 +5,7 @@ module.exports = {
     'gatsby-plugin-react-helmet',
     'gatsby-theme-apollo',
     'gatsby-plugin-svgr',
+    'gatsby-plugin-netlify',
     {
       resolve: 'gatsby-plugin-manifest',
       options: {

@@ -22,7 +22,7 @@ const app = express();
 
 const origin =
   process.env.NODE_ENV === 'production'
-    ? 'https://sorrentobarbers.com'
+    ? 'https://w8up.trevorblades.com'
     : /http:\/\/localhost:\d{4}/;
 
 app.use(cors({origin}));

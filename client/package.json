@@ -23,6 +23,7 @@
     "gatsby-plugin-chakra-ui": "^1.0.0-next.4",
     "gatsby-plugin-create-client-paths": "^2.3.3",
     "gatsby-plugin-manifest": "^2.4.14",
+    "gatsby-plugin-netlify": "^2.3.10",
     "gatsby-plugin-react-helmet": "^3.3.1",
     "gatsby-plugin-svgr": "^2.0.2",
     "gatsby-source-filesystem": "^2.3.8",
