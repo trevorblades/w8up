@@ -1,6 +1,7 @@
 import ChatBubble from '../components/ChatBubble';
 import Layout from '../components/Layout';
 import React from 'react';
+import hero from '../assets/hero.svg';
 import {Box, Button, Flex, Heading, Stack, Text} from '@chakra-ui/core';
 import {Link as GatsbyLink} from 'gatsby';
 import {Helmet} from 'react-helmet';
@@ -12,58 +13,37 @@ export default function Home() {
       <Helmet>
         <title>Low tech, SMS-based waitlist</title>
       </Helmet>
-      <Flex minH="100vh">
-        <Box
-          w="full"
-          p={{
-            base: 8,
-            md: 10
-          }}
-          my="auto"
-        >
-          <Stack
-            spacing="10"
-            w={{
-              base: 'full',
-              lg: 2 / 3
-            }}
-          >
-            <div>
-              <Flex mb="2" align="center">
-                <Box as={Logo} h="10" mr="3" />
-                <Heading
-                  fontSize="2xl"
-                  fontWeight="semibold"
-                  letterSpacing="wider"
-                >
-                  W8UP
-                </Heading>
-              </Flex>
-              <Heading fontSize="6xl" lineHeight="normal" fontWeight="light">
-                Low tech, SMS-based waitlist
-              </Heading>
-            </div>
-            <Stack maxW="300px" spacing="3">
-              <ChatBubble>Stan Marsh</ChatBubble>
-              <ChatBubble fromThem>
-                You&apos;re on the list! Your estimated wait time is 24 minutes.
-              </ChatBubble>
-            </Stack>
-            <Flex align="center">
-              <Button
-                mr="3"
-                as={GatsbyLink}
-                to="/app"
-                size="lg"
-                colorScheme="green"
-              >
-                Log in
-              </Button>
-              <Text fontSize="lg">This software is in beta</Text>
-            </Flex>
+      <Box maxW="container.lg" w="full" mx="auto" p={[8, 10, 12]}>
+        <Stack spacing="10" align="center">
+          <Flex align="center">
+            <Box as={Logo} h="10" mr="3" />
+            <Heading fontSize="2xl" fontWeight="semibold" letterSpacing="wider">
+              W8UP
+            </Heading>
+          </Flex>
+          <Box as="img" w="420px" src={hero} />
+          <Box textAlign="center">
+            <Heading mb="2" fontSize="6xl" lineHeight="normal">
+              A queue that anyone can use
+            </Heading>
+            <Heading color="gray.500" fontSize="2xl">
+              It&apos;s simple: send a text, get on the list
+            </Heading>
+          </Box>
+          <Stack maxW="320px" w="full" spacing="3">
+            <ChatBubble>Ada Lovelace</ChatBubble>
+            <ChatBubble fromThem>
+              You&apos;re on the list! Your estimated wait time is 24 minutes.
+            </ChatBubble>
           </Stack>
-        </Box>
-      </Flex>
+          <Flex align="center">
+            <Button mr="3" as={GatsbyLink} to="/app" colorScheme="green">
+              Log in
+            </Button>
+            <Text>This software is in closed beta</Text>
+          </Flex>
+        </Stack>
+      </Box>
     </Layout>
   );
 }
