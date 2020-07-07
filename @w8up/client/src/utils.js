@@ -87,3 +87,12 @@ export const LIST_MEMBERS = gql`
   }
   ${MEMBER_FRAGMENT}
 `;
+
+export const ON_ORGANIZATION_UPDATED = gql`
+  subscription OnOrganizationUpdated {
+    organizationUpdated {
+      id
+      accepting
+    }
+  }
+`;

@@ -1,17 +1,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import useEffectOnce from 'react-use/lib/useEffectOnce';
+import {ON_ORGANIZATION_UPDATED} from '../utils';
 import {Switch} from '@chakra-ui/core';
 import {gql, useMutation} from '@apollo/client';
-
-const ON_ORGANIZATION_UPDATED = gql`
-  subscription OnOrganizationUpdated {
-    organizationUpdated {
-      id
-      accepting
-    }
-  }
-`;
 
 const UPDATE_ORGANIZATION = gql`
   mutation UpdateOrganization($input: UpdateOrganizationInput!) {
