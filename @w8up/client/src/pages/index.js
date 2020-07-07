@@ -16,7 +16,7 @@ export default function Home() {
       <Box maxW="container.lg" w="full" mx="auto" p={[8, 10, 12]}>
         <Stack spacing="10" align="center">
           <Flex align="center">
-            <Box as={Logo} h="10" mr="3" />
+            <Box as={Logo} h="10" mr="3" fill="current" />
             <Heading fontSize="2xl" fontWeight="semibold" letterSpacing="wider">
               W8UP
             </Heading>
