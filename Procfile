@@ -1,1 +1,1 @@
-web: node -r esm api/server.js
+web: node -r esm @w8up/api/index.js

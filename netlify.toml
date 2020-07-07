@@ -1,0 +1,3 @@
+[build]
+  command = "yarn workspace client build"
+  publish = "@w8up/client/public"

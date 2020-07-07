@@ -1,10 +1,6 @@
 {
   "private": true,
-  "workspaces": [
-    "api",
-    "client",
-    "@w8up/common"
-  ],
+  "workspaces": ["@w8up/*"],
   "scripts": {
     "api": "yarn workspace api start",
     "client": "yarn workspace client start",

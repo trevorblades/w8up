@@ -2,7 +2,7 @@
   "name": "api",
   "version": "1.0.0",
   "scripts": {
-    "start": "nodemon -r esm -r dotenv/config server.js"
+    "start": "nodemon -r esm -r dotenv/config index.js"
   },
   "dependencies": {
     "apollo-server-express": "^2.14.1",
