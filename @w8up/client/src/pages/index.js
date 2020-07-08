@@ -80,7 +80,7 @@ export default function Home() {
             </Stack>
           </Box>
           <Box py={[8, 10, 12, 16]} color="white">
-            <Heading mb="6" fontSize="5xl">
+            <Heading mb="6" fontSize="5xl" lineHeight="normal">
               Low-tech, SMS-based waitlist
             </Heading>
             <Stack spacing="4" fontSize="xl">
