@@ -102,9 +102,9 @@ export default function Home() {
             </Stack>
           </Box>
         </Grid>
-      </Box>
-      <Box as="footer" p={[4, 5]} textAlign="center">
-        <Text color="gray.500">&copy; {new Date().getFullYear()} W8UP</Text>
+        <Box as="footer" p={[4, 5]} textAlign="center">
+          <Text color="gray.500">&copy; {new Date().getFullYear()} W8UP</Text>
+        </Box>
       </Box>
     </Layout>
   );
