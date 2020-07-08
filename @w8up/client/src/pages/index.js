@@ -4,7 +4,16 @@ import Layout from '../components/Layout';
 import React from 'react';
 import balloons from '../assets/balloons.svg';
 import texting from '../assets/texting.svg';
-import {Box, Button, Flex, Grid, Heading, Stack, Text} from '@chakra-ui/core';
+import {
+  Box,
+  Button,
+  Flex,
+  Grid,
+  Heading,
+  Link,
+  Stack,
+  Text
+} from '@chakra-ui/core';
 import {Link as GatsbyLink} from 'gatsby';
 import {Helmet} from 'react-helmet';
 
@@ -15,9 +24,10 @@ export default function Home() {
         <title>SMS-based waitlist</title>
       </Helmet>
       <Header>
-        <Heading fontSize="2xl" fontWeight="semibold">
+        <Heading mr="auto" fontSize="2xl" fontWeight="semibold">
           W8UP
         </Heading>
+        <Link href="#about">What is W8UP?</Link>
       </Header>
       <Grid
         p={[8, 10, 12, 16]}
@@ -51,6 +61,7 @@ export default function Home() {
       </Grid>
       <Box bg="gray.900">
         <Grid
+          id="about"
           gap="10"
           templateColumns="repeat(2, 1fr)"
           maxW="container.xl"
