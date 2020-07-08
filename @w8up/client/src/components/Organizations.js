@@ -35,7 +35,7 @@ export default function Organizations() {
         </Heading>
         <UserMenu user={data.me} />
       </Header>
-      <Box w="full" maxW="container.md" m="auto" p={[4, 5]}>
+      <Box w="full" maxW="container.sm" m="auto" p={[4, 5]}>
         <Elements stripe={stripePromise}>
           {data.organizations.length ? (
             <>

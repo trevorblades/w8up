@@ -11,7 +11,7 @@ const REMOVE_CUSTOMER = gql`
   }
 `;
 
-export default function RemoveButton({customer, ...props}) {
+export default function RemoveButton({customer}) {
   const [removeCustomer, {loading}] = useMutation(REMOVE_CUSTOMER, {
     variables: {
       id: customer.id
@@ -31,7 +31,6 @@ export default function RemoveButton({customer, ...props}) {
       borderRadius="full"
       isLoading={loading}
       onClick={handleClick}
-      {...props}
     >
       Remove
     </Button>

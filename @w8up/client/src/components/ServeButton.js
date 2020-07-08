@@ -5,7 +5,7 @@ import {FaCheckCircle} from 'react-icons/fa';
 import {SERVE_CUSTOMER} from '../utils';
 import {useMutation} from '@apollo/client';
 
-export default function ServeButton({mutationOptions, ...props}) {
+export default function ServeButton({mutationOptions}) {
   const [serveCustomer, {loading}] = useMutation(
     SERVE_CUSTOMER,
     mutationOptions
@@ -18,7 +18,6 @@ export default function ServeButton({mutationOptions, ...props}) {
       size="sm"
       isLoading={loading}
       onClick={serveCustomer}
-      {...props}
     >
       Serve
     </Button>
