@@ -80,12 +80,12 @@ export default function Home() {
               objectFit="contain"
             />
             <Stack mx="auto" maxW="320px" w="full" spacing="3">
-              <ChatBubble occlusionColor="gray.900">Sophie L.</ChatBubble>
-              <ChatBubble occlusionColor="gray.900" fromThem>
+              <ChatBubble darkMode>Sophie L.</ChatBubble>
+              <ChatBubble darkMode fromThem>
                 You&apos;re on the list! There are 4 people ahead of you. Your
                 estimated wait time is 20 minutes.
               </ChatBubble>
-              <ChatBubble occlusionColor="gray.900" fromThem>
+              <ChatBubble darkMode fromThem>
                 We&apos;re ready! Please head over to the store now.
               </ChatBubble>
             </Stack>

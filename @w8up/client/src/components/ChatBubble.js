@@ -6,8 +6,8 @@ function ChatBubbleTail(props) {
   return <Box position="absolute" bottom="-2px" h="20px" {...props} />;
 }
 
-export default function ChatBubble({fromThem, children, occlusionColor}) {
-  const color = fromThem ? 'gray.200' : 'blue.400';
+export default function ChatBubble({fromThem, children, darkMode}) {
+  const color = !fromThem ? 'blue.400' : darkMode ? 'gray.600' : 'gray.200';
   const backTailProps = {
     [fromThem ? 'left' : 'right']: '-7px',
     [`border${fromThem ? 'Left' : 'Right'}Color`]: color,
@@ -30,7 +30,7 @@ export default function ChatBubble({fromThem, children, occlusionColor}) {
       fontSize="20px"
       lineHeight="24px"
       position="relative"
-      color={fromThem ? undefined : 'white'}
+      color={fromThem && !darkMode ? undefined : 'white'}
       alignSelf={fromThem ? 'flex-start' : 'flex-end'}
       wordBreak="break-word"
     >
@@ -38,7 +38,7 @@ export default function ChatBubble({fromThem, children, occlusionColor}) {
       <ChatBubbleTail transform="translate(0, -2px)" {...backTailProps} />
       <ChatBubbleTail
         w="26px"
-        bg={occlusionColor}
+        bg={darkMode ? 'gray.900' : 'white'}
         transform="translate(-30px, -2px)"
         {...frontTailProps}
       />
@@ -48,10 +48,6 @@ export default function ChatBubble({fromThem, children, occlusionColor}) {
 
 ChatBubble.propTypes = {
   fromThem: PropTypes.bool,
-  occlusionColor: PropTypes.string,
+  darkMode: PropTypes.bool,
   children: PropTypes.node.isRequired
-};
-
-ChatBubble.defaultProps = {
-  occlusionColor: 'white'
 };
