@@ -3,7 +3,7 @@ import Header from '../components/Header';
 import Layout from '../components/Layout';
 import React from 'react';
 import balloons from '../assets/balloons.svg';
-import stability from '../assets/stability.svg';
+import texting from '../assets/texting.svg';
 import {Box, Button, Flex, Grid, Heading, Stack, Text} from '@chakra-ui/core';
 import {Link as GatsbyLink} from 'gatsby';
 import {Helmet} from 'react-helmet';
@@ -29,7 +29,7 @@ export default function Home() {
       >
         <Box>
           <Heading mb="3" fontSize="6xl" lineHeight="normal">
-            The queue that <mark>anyone</mark> can use
+            The waitlist that <mark>anyone</mark> can use
           </Heading>
           <Heading mb="6" color="gray.500" fontSize="3xl">
             Send a text, get on the list
@@ -47,7 +47,7 @@ export default function Home() {
             <Text fontSize="lg">Invite-only beta</Text>
           </Flex>
         </Box>
-        <Box as="img" src={stability} h="400px" objectFit="contain" />
+        <Box as="img" src={texting} h="400px" objectFit="contain" />
       </Grid>
       <Box bg="gray.900">
         <Grid
