@@ -86,7 +86,7 @@ export default function SettingsForm(props) {
 
     updateOrganization({
       variables: {
-        input: omit(organization, ['phone', '__typename'])
+        input: omit(organization, ['phone', 'isOwn', '__typename'])
       }
     });
   }
